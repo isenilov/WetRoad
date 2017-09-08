@@ -8,14 +8,8 @@ import time
 
 start = time.time()
 print("\nExtracting features...")
-features, labels = extract_features()
+features, labels = extract_features("dataset/wet/train_wet.wav", "dataset/dry/train_dry.wav", flatten=True, scaling=True)
 print(features.shape, labels.shape)
-end = time.time()
-print("Took %.3f sec." % (end - start))
-
-start = time.time()
-print("\nNormalizing features...")
-features = sklearn.preprocessing.scale(features)
 end = time.time()
 print("Took %.3f sec." % (end - start))
 

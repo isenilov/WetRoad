@@ -2,6 +2,8 @@ from scipy.io import wavfile
 import numpy as np
 from scipy import signal
 from librosa import feature
+from sklearn.preprocessing import scale
+from keras.utils import to_categorical
 
 
 def extract(wav_file, nfft=64, window_length=0.03, mel=False, flatten=True):
@@ -29,9 +31,14 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=False, flatten=True):
     return np.stack(feat)
 
 
-def extract_features(mel=True, flatten=True):
-    features_wet = extract("dataset/wet/train_wet.wav", mel=mel, flatten=flatten)
+def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False):
+    features_wet = extract(file_wet, mel=mel, flatten=flatten)
+    features_dry = extract(file_dry, mel=mel, flatten=flatten)
     labels_wet = np.ones(features_wet.shape[0])
-    features_dry = extract("dataset/dry/train_dry.wav", mel=mel, flatten=flatten)
     labels_dry = np.zeros(features_dry.shape[0])
-    return np.concatenate((features_wet, features_dry)), np.concatenate((labels_wet, labels_dry))
+    features = np.concatenate((features_wet, features_dry))
+    labels = np.concatenate((labels_wet, labels_dry))
+    labels = to_categorical(labels, 2)
+    if scaling:
+        features = scale(features)
+    return features, labels
