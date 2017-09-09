@@ -1,21 +1,14 @@
 from feature_extraction import extract_features
-import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import recall_score, accuracy_score
-import sklearn.preprocessing
 from sklearn.svm import SVC
 import time
 
 start = time.time()
 print("\nExtracting features...")
-features, labels = extract_features("dataset/wet/train_wet.wav", "dataset/dry/train_dry.wav", flatten=True, scaling=True)
-print(features.shape, labels.shape)
-end = time.time()
-print("Took %.3f sec." % (end - start))
-
-start = time.time()
-print("\nSplitting dataset...")
-X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
+                                    "dataset/dry1/audio_mono.wav", flatten=True, scaling=True, categorical=False)
+X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
+                                  "dataset/dry2/audio_mono.wav", flatten=True, scaling=True, categorical=False)
 end = time.time()
 print("Took %.3f sec." % (end - start))
 

@@ -11,9 +11,12 @@ from keras.utils import to_categorical
 
 start = time()
 print("\nExtracting features...")
-X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav", flatten=False)
-X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav", flatten=False)
-X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav", flatten=False)
+X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
+                                    "dataset/dry1/audio_mono.wav", flatten=False, scaling=True)
+X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
+                                  "dataset/dry2/audio_mono.wav", flatten=False, scaling=True)
+X_val, y_val = extract_features("dataset/wet3/audio_mono.wav",
+                                "dataset/dry3/audio_mono.wav", flatten=False, scaling=True)
 end = time()
 print("Took %.3f sec." % (end - start))
 
