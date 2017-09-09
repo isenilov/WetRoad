@@ -6,7 +6,7 @@ from sklearn.preprocessing import scale
 from keras.utils import to_categorical
 
 
-def extract(wav_file, nfft=64, window_length=0.03, mel=False, flatten=True):
+def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
     rate, frames = wavfile.read(wav_file)
     window = round(window_length * rate)
     feat = []
@@ -31,14 +31,15 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=False, flatten=True):
     return np.stack(feat)
 
 
-def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False):
+def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
     features_wet = extract(file_wet, mel=mel, flatten=flatten)
     features_dry = extract(file_dry, mel=mel, flatten=flatten)
     labels_wet = np.ones(features_wet.shape[0])
     labels_dry = np.zeros(features_dry.shape[0])
     features = np.concatenate((features_wet, features_dry))
     labels = np.concatenate((labels_wet, labels_dry))
-    labels = to_categorical(labels, 2)
+    if categorical:
+        labels = to_categorical(labels, 2)
     if scaling:
         features = scale(features)
     return features, labels
