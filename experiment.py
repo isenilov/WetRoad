@@ -1,13 +1,11 @@
 from scipy.io import wavfile
-import numpy as np
 import librosa
 from scipy import signal
 import plotly
-import plotly.graph_objs as go
 from sklearn import preprocessing
 
 nfft = 64
-window_length = 0.03
+window_length = 0.1
 
 rate, frames = wavfile.read("dataset/wet/train_wet.wav")
 
@@ -21,37 +19,24 @@ f, t, S = signal.spectrogram(frames[i:i + window - 1],
                              scaling='spectrum')
 
 S = preprocessing.scale(S)
+S = S[:12]
 
-plotly.offline.plot([dict(x=t, y=f, z=S, type='surface')],
-    filename='surface.html')
+plotly.offline.plot([dict(x=t, y=f, z=S, type='surface')], filename='surface.html')
+plotly.offline.plot([dict(x=t, y=f, z=S, type='heatmap')], filename='heatmap.html')
 
-mfccs = librosa.feature.mfcc(frames[i:i + window - 1], sr=rate, n_fft=nfft, hop_length=round(nfft/2))
+
+mfccs = librosa.feature.mfcc(frames[i:i + window - 1], sr=rate, n_fft=nfft, hop_length=round(nfft/2), n_mfcc=12)
 mfccs = preprocessing.scale(mfccs)
-print(mfccs.shape)
 
-plotly.offline.plot([dict(z=mfccs, type='surface')],
-    filename='mfcc.html')
+plotly.offline.plot([dict(z=mfccs, type='heatmap')], filename='mfcc.html')
 
-
-
-data = [
-    go.Heatmap(
-        z=S,
-        x=t,
-        y=f,
-        colorscale='Viridis',
-    )
-]
-
-layout = go.Layout(
-    title='Heatmap'
-)
-
-fig = go.Figure(data=data, layout=layout)
-plotly.offline.plot(fig, filename='heatmap.html')
-
+print("Shape of the MFCCs:", mfccs.shape)
+print("Shape of the spectrogram:", S.shape)
 print("Number of frequencies:", len(f))
 print("Number of time bins:", len(t))
+print("Frequencies:", f)
+print("Time bins:", t)
+
 '''
 plt.pcolormesh(t, f, S)
 plt.xlabel("Time, s")
