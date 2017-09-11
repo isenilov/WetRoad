@@ -40,6 +40,14 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
     labels = np.concatenate((labels_wet, labels_dry))
     if categorical:
         labels = to_categorical(labels, 2)
-    if scaling:
+    if scaling and flatten:
         features = scale(features)
     return features, labels
+
+if __name__ == "__main__":
+    import plotly
+
+    X_train, y_train = extract_features("dataset/wet/test_wet.wav",
+                                        "dataset/dry/test_dry.wav", flatten=False, scaling=False, categorical=False)
+
+    plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')

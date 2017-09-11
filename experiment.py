@@ -5,7 +5,7 @@ import plotly
 from sklearn import preprocessing
 
 nfft = 64
-window_length = 0.1
+window_length = 0.03
 
 rate, frames = wavfile.read("dataset/wet/train_wet.wav")
 
@@ -20,6 +20,7 @@ f, t, S = signal.spectrogram(frames[i:i + window - 1],
 
 S = preprocessing.scale(S)
 S = S[:12]
+f = f[:12]
 
 plotly.offline.plot([dict(x=t, y=f, z=S, type='surface')], filename='surface.html')
 plotly.offline.plot([dict(x=t, y=f, z=S, type='heatmap')], filename='heatmap.html')
