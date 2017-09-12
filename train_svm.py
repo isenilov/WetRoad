@@ -7,8 +7,8 @@ start = time.time()
 print("\nExtracting features...")
 X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
                                     "dataset/dry1/audio_mono.wav", flatten=True, scaling=True, categorical=False)
-X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
-                                  "dataset/dry2/audio_mono.wav", flatten=True, scaling=True, categorical=False)
+X_test, y_test = extract_features("dataset/wet/chevy_wet.wav",
+                                  "dataset/dry/chevy_dry.wav", flatten=True, scaling=True, categorical=False)
 end = time.time()
 print("Took %.3f sec." % (end - start))
 
