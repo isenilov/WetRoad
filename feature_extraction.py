@@ -48,7 +48,7 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
 
 def get_last_weights(path):
     import glob
-    list = sorted(glob.glob(path))
+    list = sorted(glob.glob(path + "*.h5"))
     return max(list)
 
 
