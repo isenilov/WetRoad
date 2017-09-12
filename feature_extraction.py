@@ -3,7 +3,7 @@ import numpy as np
 from scipy import signal
 from librosa import feature
 from sklearn.preprocessing import scale
-from keras.utils import to_categorical
+
 
 
 def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
@@ -32,6 +32,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
 
 
 def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
+    from keras.utils import to_categorical
     features_wet = extract(file_wet, mel=mel, flatten=flatten)
     features_dry = extract(file_dry, mel=mel, flatten=flatten)
     labels_wet = np.ones(features_wet.shape[0])
@@ -44,10 +45,21 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
         features = scale(features)
     return features, labels
 
+
+def get_last_weights(path):
+    import glob
+    list = sorted(glob.glob(path))
+    return max(list)
+
+
 if __name__ == "__main__":
-    import plotly
+    # import plotly
+    #
+    # X_train, y_train = extract_features("dataset/wet/test_wet.wav",
+    #                                     "dataset/dry/test_dry.wav", flatten=False, scaling=False, categorical=False)
+    #
+    # plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')
 
-    X_train, y_train = extract_features("dataset/wet/test_wet.wav",
-                                        "dataset/dry/test_dry.wav", flatten=False, scaling=False, categorical=False)
+    print(get_last_weights("weights/"))
 
-    plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')
+
