@@ -46,9 +46,14 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
     return features, labels
 
 
-def get_last_weights(path):
+def get_last(path, type):
     import glob
-    list = sorted(glob.glob(path + "*.h5"))
+    if type == "weights":
+        list = sorted(glob.glob(path + "*.h5"))
+    elif type == "model":
+        list = sorted(glob.glob(path + "*.yaml"))
+    else:
+        return None
     return max(list)
 
 
@@ -60,6 +65,6 @@ if __name__ == "__main__":
     #
     # plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')
 
-    print(get_last_weights("weights/"))
+    print(get_last("models/"))
 
 
