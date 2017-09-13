@@ -1,7 +1,6 @@
 from feature_extraction import extract_features, get_last
 from sklearn.metrics import recall_score, accuracy_score
 from time import time
-import json
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.layers.wrappers import Bidirectional
@@ -27,18 +26,18 @@ print("\nTraining model...")
 tbCallback = TensorBoard()
 
 # architecture of the network is adopted from https://arxiv.org/pdf/1511.07035.pdf
-with open(get_last("models/", "model"), "r") as model_file:
-    model_yaml = model_file.read()
-print(model_yaml)
-model = model_from_yaml(model_yaml)
-
-# model = Sequential()
-#
-# model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh"),
-#                         input_shape=(X_test.shape[1], X_test.shape[2])))
-# model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
-# model.add(Bidirectional(LSTM(216, activation="tanh")))
-# model.add(Dense(2, activation='softmax'))
+file = get_last("models/", "model")
+if file is None:
+    model = Sequential()
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh"),
+                            input_shape=(X_test.shape[1], X_test.shape[2])))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
+    model.add(Bidirectional(LSTM(216, activation="tanh")))
+    model.add(Dense(2, activation='softmax'))
+else:
+    with open(file, "r") as model_file:
+        model_yaml = model_file.read()
+    model = model_from_yaml(model_yaml)
 
 optimizer = optimizers.Adam(lr=1e-5)
 

@@ -50,11 +50,11 @@ def get_last(path, type):
     import glob
     if type == "weights":
         list = sorted(glob.glob(path + "*.h5"))
-    elif type == "model":
+    if type == "model":
         list = sorted(glob.glob(path + "*.yaml"))
-    else:
-        return None
-    return max(list)
+    if len(list) > 0:
+        return max(list)
+    return None
 
 
 if __name__ == "__main__":
