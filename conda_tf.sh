@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-conda install -y scikit-learn
+conda install -y scikit-learn keras
 conda install -y -c conda-forge librosa
 
 sudo apt-get install openjdk-8-jdk -y --force-yes -qq
