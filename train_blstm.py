@@ -5,7 +5,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.layers.wrappers import Bidirectional
 from keras.callbacks import TensorBoard
-from keras import optimizers
+from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
 
@@ -42,10 +42,15 @@ tbCallback = TensorBoard()
 
 # architecture of the network is adopted from https://arxiv.org/pdf/1511.07035.pdf
 model = Sequential()
-model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh"),
+model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
+                             ),
                         input_shape=(X_train.shape[1], X_train.shape[2])))
-model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
-model.add(Bidirectional(LSTM(216, activation="tanh")))
+model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
+                             kernel_regularizer=regularizers.l2(0.01),
+                             activity_regularizer=regularizers.l1(0.01),
+                             dropout=0.2)))
+model.add(Bidirectional(LSTM(216, activation="tanh",
+                             dropout=0.2)))
 model.add(Dense(2, activation='softmax'))
 optimizer = optimizers.Adam(lr=1e-5)
 model.compile(loss='categorical_crossentropy',
@@ -57,7 +62,7 @@ print("Using weights:", weights)
 model.fit(X_train, y_train,
           validation_data=(X_val, y_val),
           callbacks=[tbCallback],
-          epochs=50,
+          epochs=10,
           batch_size=128,
           verbose=1)
 
