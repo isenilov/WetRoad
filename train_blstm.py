@@ -1,4 +1,4 @@
-from feature_extraction import extract_features, get_last_weights
+from feature_extraction import extract_features, get_last
 from sklearn.metrics import recall_score, accuracy_score
 from time import time
 from keras.models import Sequential
@@ -51,16 +51,20 @@ optimizer = optimizers.Adam(lr=1e-5)
 model.compile(loss='categorical_crossentropy',
               optimizer=optimizer,
               metrics=['accuracy'])
-weights = get_last_weights("weights/")
+weights = get_last("models/", "weights")
 model.load_weights(weights)
-print("Using wights:", weights)
+print("Using weights:", weights)
 model.fit(X_train, y_train,
           validation_data=(X_val, y_val),
           callbacks=[tbCallback],
           epochs=50,
           batch_size=128,
           verbose=1)
-model.save_weights("weights/weights " + datetime.now().strftime("%d-%m-%Y %H:%M") + ".h5")
+
+dt = datetime.now().strftime("%d-%m-%Y %H:%M")
+model.save_weights("models/models " + dt + ".h5")
+with open("models/model " + dt + ".yaml", "w") as model_yaml:
+    model_yaml.write(model.to_yaml())
 end = time()
 print("\nTook %.3f sec." % (end - start))
 
