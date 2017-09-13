@@ -17,4 +17,4 @@ git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
 ./configure
 bazel build -c opt --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-msse4.2 -k //tensorflow/tools/pip_package:build_pip_package
-sudo pip install /tmp/tensorflow_pkg/tensorflow-1.3.0-py2-none-any.whl
+bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
