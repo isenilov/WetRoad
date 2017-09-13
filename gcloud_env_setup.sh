@@ -8,6 +8,9 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 sudo apt-get update -y --force-yes -qq
 sudo apt-get install gcsfuse -y --force-yes -qq
 
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
 conda install -y scikit-learn
 conda install -y -c conda-forge librosa tensorflow tensorboard
 
