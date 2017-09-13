@@ -58,13 +58,12 @@ def get_last(path, type):
 
 
 if __name__ == "__main__":
-    # import plotly
-    #
-    # X_train, y_train = extract_features("dataset/wet/test_wet.wav",
-    #                                     "dataset/dry/test_dry.wav", flatten=False, scaling=False, categorical=False)
-    #
-    # plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')
+    import plotly
 
-    print(get_last("models/"))
+    X_train, y_train = extract_features("dataset/wet/test_wet.wav",
+                                        "dataset/dry/test_dry.wav", flatten=False, scaling=False, categorical=False)
+
+    plotly.offline.plot([dict(z=X_train[0], type='surface')], filename='feature_vector.html')
+
 
 
