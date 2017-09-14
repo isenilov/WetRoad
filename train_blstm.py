@@ -1,5 +1,7 @@
 from feature_extraction import extract_features, get_last
 from sklearn.metrics import recall_score, accuracy_score
+import numpy as np
+from sklearn.model_selection import train_test_split
 from time import time
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
@@ -12,6 +14,14 @@ from datetime import datetime
 
 start = time()
 print("\nExtracting features...")
+X_1, y_1 = extract_features("dataset/wet/chevy_wet.wav",
+                            "dataset/dry/chevy_dry.wav", flatten=False, scaling=False)
+X_2, y_2 = extract_features("dataset/wet1/audio_mono.wav",
+                            "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
+X = np.concatenate((X_1, X_2))
+y = np.concatenate((y_1, y_2))
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
 # X_train, y_train = extract_features("dataset/wet/test_wet.wav",
 #                                     "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 # X_test, y_test = extract_features("dataset/wet/test_wet.wav",
@@ -20,12 +30,12 @@ print("\nExtracting features...")
 #                                 "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 
 
-X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
-                                    "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
-X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
-                                  "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
-X_val, y_val = extract_features("dataset/wet3/audio_mono.wav",
-                                "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
+# X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
+#                                     "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
+# X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
+#                                   "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
+# X_val, y_val = extract_features("dataset/wet3/audio_mono.wav",
+#                                 "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
 end = time()
 print("Took %.3f sec." % (end - start))
 
@@ -45,12 +55,8 @@ model = Sequential()
 model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
                              ),
                         input_shape=(X_train.shape[1], X_train.shape[2])))
-model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
-                             kernel_regularizer=regularizers.l2(0.01),
-                             activity_regularizer=regularizers.l1(0.01),
-                             dropout=0.2)))
-model.add(Bidirectional(LSTM(216, activation="tanh",
-                             dropout=0.2)))
+model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
+model.add(Bidirectional(LSTM(216, activation="tanh")))
 model.add(Dense(2, activation='softmax'))
 optimizer = optimizers.Adam(lr=1e-5)
 model.compile(loss='categorical_crossentropy',
@@ -60,7 +66,7 @@ weights = get_last("models/", "weights")
 model.load_weights(weights)
 print("Using weights:", weights)
 model.fit(X_train, y_train,
-          validation_data=(X_val, y_val),
+#          validation_data=(X_val, y_val),
           callbacks=[tbCallback],
           epochs=10,
           batch_size=128,
