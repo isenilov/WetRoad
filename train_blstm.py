@@ -73,7 +73,7 @@ model.fit(X_train, y_train,
           verbose=1)
 
 dt = datetime.now().strftime("%d-%m-%Y %H:%M")
-model.save_weights("models/models " + dt + ".h5")
+model.save_weights("models/weights " + dt + ".h5")
 with open("models/model " + dt + ".yaml", "w") as model_yaml:
     model_yaml.write(model.to_yaml())
 end = time()
