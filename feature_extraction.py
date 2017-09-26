@@ -35,6 +35,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
 def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
     pickle_file = os.path.basename(file_wet) + "-" + os.path.basename(file_dry) + ".pkl"
     if os.path.exists(pickle_file):
+        print("Using pickle file", pickle_file)
         with open(pickle_file, "rb") as f:
             features, labels = pickle.load(f)
         return features, labels
