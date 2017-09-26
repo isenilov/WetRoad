@@ -11,9 +11,9 @@ try:
     start = time.time()
     print("\nExtracting features...")
     X_1, y_1 = extract_features("dataset/wet/chevy_wet.wav",
-                                "dataset/dry/chevy_dry.wav", flatten=False, scaling=False)
+                                "dataset/dry/chevy_dry.wav", flatten=True, scaling=True, categorical=False)
     X_2, y_2 = extract_features("dataset/wet1/audio_mono.wav",
-                                "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
+                                "dataset/dry1/audio_mono.wav", flatten=True, scaling=True, categorical=False)
     X = np.concatenate((X_1, X_2))
     y = np.concatenate((y_1, y_2))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
@@ -44,6 +44,11 @@ try:
     print("Accuracy: %s" % acc)
     print("Recall (wet): %s" % rec)
     print("Took %.3f sec." % (end - start))
+
+except Exception as e:
+    dt = datetime.now().strftime("%d-%m-%Y %H:%M")
+    with open(dt + ".log", "w") as f:
+        f.write(e)
 
 finally:
     os.system("sudo poweroff")
