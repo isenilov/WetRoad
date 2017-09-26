@@ -3,7 +3,8 @@ import numpy as np
 from scipy import signal
 from librosa import feature
 from sklearn.preprocessing import scale
-
+import os.path
+import pickle
 
 
 def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
@@ -32,7 +33,11 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
 
 
 def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
-    from keras.utils import to_categorical
+    pickle_file = os.path.basename(file_wet) + "-" + os.path.basename(file_dry) + ".pkl"
+    if os.path.exists(pickle_file):
+        with open(pickle_file, "rb") as f:
+            features, labels = pickle.load(f)
+        return features, labels
     features_wet = extract(file_wet, mel=mel, flatten=flatten)
     features_dry = extract(file_dry, mel=mel, flatten=flatten)
     labels_wet = np.ones(features_wet.shape[0])
@@ -40,9 +45,12 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
     features = np.concatenate((features_wet, features_dry))
     labels = np.concatenate((labels_wet, labels_dry))
     if categorical:
+        from keras.utils import to_categorical
         labels = to_categorical(labels, 2)
     if scaling and flatten:
         features = scale(features)
+    with open(pickle_file, "wb") as f:
+        pickle.dump((features, labels), f)
     return features, labels
 
 
