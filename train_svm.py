@@ -35,7 +35,7 @@ try:
     print("\nEvaluating...")
     y_pred = clf.predict(X_test)
 
-    dt = datetime.now().strftime("%d-%m-%Y %H:%M")
+    dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     acc = accuracy_score(y_test, y_pred)
     rec = recall_score(y_test, y_pred)
     end = time.time()
@@ -46,9 +46,10 @@ try:
     print("Took %.3f sec." % (end - start))
 
 except Exception as e:
-    dt = datetime.now().strftime("%d-%m-%Y %H:%M")
+    dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     with open(dt + ".log", "w") as f:
-        f.write(e)
+        f.write(str(e))
+    os.system("sudo poweroff")
 
-finally:
+else:
     os.system("sudo poweroff")
