@@ -29,7 +29,8 @@ try:
     clf = SVC(verbose=2)
     clf.fit(X_train, y_train)
     end = time.time()
-    print("\nTook %.3f sec." % (end - start))
+    training_time = end - start
+    print("\nTook %.3f sec." % training_time)
 
     start = time.time()
     print("\nEvaluating...")
@@ -40,7 +41,8 @@ try:
     rec = recall_score(y_test, y_pred)
     end = time.time()
     with open('results.txt','a') as f:
-        f.write("SVM" + dt + " Accuracy: " + str(acc) + " Reacall: " + str(rec) + " Time: " + str(end-start) + " s\n")
+        f.write("SVM" + dt + " Accuracy: " + str(acc) +
+                " Reacall: " + str(rec) + " Training time: " + str(training_time) + " s\n")
     print("Accuracy: %s" % acc)
     print("Recall (wet): %s" % rec)
     print("Took %.3f sec." % (end - start))
@@ -49,7 +51,7 @@ except Exception as e:
     dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     with open(dt + ".log", "w") as f:
         f.write(str(e))
-    os.system("sudo poweroff")
+    os.system("sudo poweroff")  # Shut down virtual machine in case of error
 
 else:
-    os.system("sudo poweroff")
+    os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
