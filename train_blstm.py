@@ -79,7 +79,7 @@ try:
               callbacks=[tbCallback],
               epochs=50,
               batch_size=128,
-              verbose=2)
+              verbose=1)
 
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/weights " + dt + ".h5"
