@@ -33,7 +33,11 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
 
 
 def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
-    pickle_file = os.path.basename(file_wet) + "-" + os.path.basename(file_dry) + ".pkl"
+    to_replace ="\\/"
+    for char in to_replace:
+        fw = file_wet.replace(char, "_")
+        fd = file_dry.replace(char, "_")
+    pickle_file = fw + "-" + fd + ".pkl"
     if os.path.exists(pickle_file):
         print("Using pickle file", pickle_file)
         with open(pickle_file, "rb") as f:
