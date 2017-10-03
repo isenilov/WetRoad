@@ -77,7 +77,7 @@ try:
     model.fit(X_train, y_train,
     #          validation_data=(X_val, y_val),
               callbacks=[tbCallback],
-              epochs=1,
+              epochs=50,
               batch_size=128,
               verbose=2)
 
