@@ -37,7 +37,7 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
     for char in to_replace:
         fw = file_wet.replace(char, "_")
         fd = file_dry.replace(char, "_")
-    pickle_file = fw + "-" + fd + ".pkl"
+    pickle_file = "dataset\\" + fw + "-" + fd + ".pkl"
     if os.path.exists(pickle_file):
         print("Using pickle file", pickle_file)
         with open(pickle_file, "rb") as f:
