@@ -5,10 +5,10 @@ import plotly
 from sklearn import preprocessing
 
 nfft = 64
-window_length = 0.3
+window_length = 0.03
 
-rate, frames = wavfile.read("dataset/wet/train_wet.wav")
-rate2, frames2 = wavfile.read("dataset/wet/chevy_wet.wav")
+rate, frames = wavfile.read("dataset/dry/train_dry.wav")
+rate2, frames2 = wavfile.read("dataset/dry/chevy_dry.wav")
 
 window = round(window_length * rate)
 
