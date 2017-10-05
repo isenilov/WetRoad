@@ -31,9 +31,9 @@ try:
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
     X_train, y_train = extract_features("dataset/wet/test_wet.wav",
-                                        "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=False, categorical=True)
+                                        "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
     X_test, y_test = extract_features("dataset/wet/test_wet.wav",
-                                      "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=False, categorical=True)
+                                      "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
     X_train = np.expand_dims(X_train, axis=2)
     X_test = np.expand_dims(X_test, axis=2)
 
