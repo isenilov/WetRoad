@@ -20,11 +20,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
                                hop_length=round(nfft / 2),
                                fmax=8000)
         else:
-            _, _, pxx = signal.spectrogram(frames[i:i + window - 1],
-                                           rate,
-                                           nperseg=nfft,
-                                           noverlap=round(nfft / 2))
-
+            pxx = frames[i:i + window - 1]
         if flatten:
             feat.append(pxx.flatten())
         else:
