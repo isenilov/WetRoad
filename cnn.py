@@ -80,7 +80,7 @@ try:
     model.add(Dense(2, activation='sigmoid'))
 
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adamax',
+                  optimizer='adam',
                   metrics=['accuracy'])
 
     weights = get_last("models/cnn/", "weights")
