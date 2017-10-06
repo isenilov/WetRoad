@@ -2,7 +2,7 @@ from scipy.io import wavfile
 import numpy as np
 from scipy import signal
 from librosa import feature
-from sklearn.preprocessing import scale
+from sklearn.preprocessing import minmax_scale
 import os.path
 import pickle
 
@@ -49,7 +49,7 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
         from keras.utils import to_categorical
         labels = to_categorical(labels, 2)
     if scaling and flatten:
-        features = scale(features)
+        features = minmax_scale(features)
     with open(pickle_file, "wb") as f:
         pickle.dump((features, labels), f)
     return features, labels
