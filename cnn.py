@@ -30,23 +30,27 @@ try:
 
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
-    X_train, y_train = extract_features("dataset/wet/test_wet.wav",
-                                        "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
-    X_test, y_test = extract_features("dataset/wet/test_wet.wav",
-                                      "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+    # X_train, y_train = extract_features("dataset/wet/test_wet.wav",
+    #                                     "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+    # X_test, y_test = extract_features("dataset/wet/test_wet.wav",
+    #                                   "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+
+    X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
+                                        mel=False, flatten=False, scaling=True, categorical=True)
+    X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+                                      mel=False, flatten=False, scaling=True, categorical=True)
+    X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+                                    mel=False, flatten=False, scaling=True, categorical=True)
+
     X_train = np.expand_dims(X_train, axis=2)
     X_test = np.expand_dims(X_test, axis=2)
+    X_val = np.expand_dims(X_val, axis=2)
 
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav",
     #                                 "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True)
 
 
-    # X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
-    #                                     "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
-    # X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
-    #                                   "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
-    # X_val, y_val = extract_features("dataset/wet3/audio_mono.wav",
-    #                                 "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
+
     end = time()
     print("Took %.3f sec." % (end - start))
 
@@ -81,7 +85,7 @@ try:
     if weights is not None:
         model.load_weights(weights)
     print("Using weights:", weights)
-    model.fit(X_train, y_train, batch_size=128, epochs=50, verbose=1)
+    model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=128, epochs=50, verbose=1)
 
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
