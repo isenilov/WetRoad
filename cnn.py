@@ -34,6 +34,8 @@ try:
     #                                     "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
     # X_test, y_test = extract_features("dataset/wet/test_wet.wav",
     #                                   "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+    # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
+    #                                 mel=False, flatten=False, scaling=True, categorical=True)
 
     X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                         mel=False, flatten=False, scaling=True, categorical=True)
@@ -68,17 +70,17 @@ try:
     model = Sequential()
     model.add(Conv1D(filters=1, kernel_size=3, strides=2,
                      input_shape=X_train.shape[1:], kernel_initializer='uniform',
-                     activation='tanh'))
-    model.add(Conv1D(64, 3, activation='tanh'))
+                     activation='tanh', kernel_regularizer='l2', activity_regularizer='l2'))
+    model.add(Conv1D(64, 3, activation='tanh', kernel_regularizer='l2', activity_regularizer='l2'))
     model.add(MaxPooling1D(3))
-    model.add(Conv1D(128, 3, activation='tanh'))
-    model.add(Conv1D(256, 3, activation='tanh'))
+    model.add(Conv1D(128, 3, activation='tanh', kernel_regularizer='l2', activity_regularizer='l2'))
+    model.add(Conv1D(256, 3, activation='tanh', kernel_regularizer='l2', activity_regularizer='l2'))
     model.add(GlobalAveragePooling1D())
     model.add(Dropout(0.3))
     model.add(Dense(2, activation='sigmoid'))
 
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
+                  optimizer='adamax',
                   metrics=['accuracy'])
 
     weights = get_last("models/cnn/", "weights")
