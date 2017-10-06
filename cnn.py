@@ -70,13 +70,13 @@ try:
     model = Sequential()
     model.add(Conv1D(filters=1, kernel_size=3, strides=2,
                      input_shape=X_train.shape[1:], kernel_initializer='uniform',
-                     activation='tanh', kernel_regularizer='l2'))
+                     activation='tanh'))
     # model.add(Dropout(0.2))
-    model.add(Conv1D(64, 3, activation='tanh', kernel_regularizer='l2'))
+    model.add(Conv1D(64, 3, activation='tanh'))
     model.add(MaxPooling1D(3))
     model.add(Dropout(0.2))
-    model.add(Conv1D(128, 3, activation='tanh', kernel_regularizer='l2'))
-    model.add(Conv1D(256, 3, activation='tanh', kernel_regularizer='l2'))
+    model.add(Conv1D(128, 3, activation='tanh'))
+    model.add(Conv1D(256, 3, activation='tanh'))
     model.add(GlobalAveragePooling1D())
     model.add(Dropout(0.2))
     model.add(Dense(2, activation='sigmoid'))
