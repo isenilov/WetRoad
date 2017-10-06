@@ -85,7 +85,8 @@ try:
     if weights is not None:
         model.load_weights(weights)
     print("Using weights:", weights)
-    model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=128, epochs=50, verbose=1)
+    print("Dataset shape:", X_train.shape)
+    model.fit(X_train, y_train, validation_data=(X_val, y_val), batch_size=128, epochs=10, verbose=1)
 
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
