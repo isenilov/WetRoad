@@ -12,7 +12,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
     window = round(window_length * rate)
     feat = []
 
-    for i in range(0, len(frames)-window, window):
+    for i in range(0, len(frames)-window, int(window/2)):
         if mel:
             pxx = feature.mfcc(frames[i:i + window - 1],
                                sr=rate,
@@ -20,7 +20,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
                                hop_length=round(nfft / 2),
                                fmax=8000)
         else:
-            pxx = frames[i:(i + int(window / 2))]
+            pxx = frames[i:i + window]
         if flatten:
             feat.append(pxx.flatten())
         else:
