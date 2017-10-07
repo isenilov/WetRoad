@@ -68,7 +68,7 @@ try:
     tbCallback = TensorBoard()
 
     model = Sequential()
-    model.add(Conv1D(filters=32, kernel_size=128, strides=128,
+    model.add(Conv1D(filters=8, kernel_size=32, strides=32,
                      input_shape=X_train.shape[1:], kernel_initializer='uniform',
                      activation='relu'))
     # model.add(Dropout(0.2))
@@ -89,6 +89,7 @@ try:
                   optimizer='adam',
                   metrics=['accuracy'])
 
+    model.summary()
     weights = get_last("models/cnn/", "weights")
     if weights is not None:
         model.load_weights(weights)
