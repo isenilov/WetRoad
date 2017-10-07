@@ -20,7 +20,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
                                hop_length=round(nfft / 2),
                                fmax=8000)
         else:
-            pxx = frames[i:(i + window) / 2]
+            pxx = frames[i:int((i + window) / 2)]
         if flatten:
             feat.append(pxx.flatten())
         else:
