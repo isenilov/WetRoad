@@ -68,18 +68,22 @@ try:
     tbCallback = TensorBoard()
 
     model = Sequential()
-    model.add(Conv1D(filters=1, kernel_size=3, strides=2,
+    model.add(Conv1D(filters=32, kernel_size=128, strides=128,
                      input_shape=X_train.shape[1:], kernel_initializer='uniform',
-                     activation='tanh'))
+                     activation='relu'))
     # model.add(Dropout(0.2))
-    model.add(Conv1D(64, 3, activation='tanh'))
-    model.add(MaxPooling1D(3))
+    model.add(Conv1D(64, 32, activation='relu'))
+    model.add(MaxPooling1D(4))
     # model.add(Dropout(0.2))
-    model.add(Conv1D(128, 3, activation='tanh'))
-    model.add(Conv1D(256, 3, activation='tanh'))
-    model.add(GlobalAveragePooling1D())
-    # model.add(Dropout(0.2))
-    model.add(Dense(2, activation='sigmoid'))
+    model.add(Conv1D(128, 16, activation='relu'))
+    model.add(MaxPooling1D(4))
+    model.add(Conv1D(256, 8, activation='relu'))
+    model.add(MaxPooling1D(4))
+    # model.add(GlobalAveragePooling1D())
+    model.add(Dropout(0.5))
+    model.add(Dense(100, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(2, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
