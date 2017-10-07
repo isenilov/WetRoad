@@ -68,7 +68,7 @@ try:
     tbCallback = TensorBoard()
 
     model = Sequential()
-    model.add(Conv1D(filters=8, kernel_size=32, strides=32,
+    model.add(Conv1D(filters=2, kernel_size=8, strides=2,
                      input_shape=X_train.shape[1:], kernel_initializer='uniform',
                      activation='relu'))
     # model.add(Dropout(0.2))
@@ -127,7 +127,8 @@ except Exception as e:
     dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     with open(dt + ".log", "w") as f:
         f.write(str(e))
-    os.system("sudo poweroff")  # Shut down virtual machine in case of error
+    # os.system("sudo poweroff")  # Shut down virtual machine in case of error
 
 else:
-    os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
+    pass
+    # os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
