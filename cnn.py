@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from time import time
 from keras.models import Sequential
-from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense
+from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten
 from keras.layers.wrappers import Bidirectional
 from keras.callbacks import TensorBoard
 from keras import optimizers, regularizers
@@ -79,6 +79,7 @@ try:
     model.add(MaxPooling1D(4))
     model.add(Conv1D(256, 8, activation='relu'))
     model.add(MaxPooling1D(4))
+    model.add(Flatten())
     # model.add(GlobalAveragePooling1D())
     model.add(Dropout(0.5))
     model.add(Dense(100, activation='relu'))
