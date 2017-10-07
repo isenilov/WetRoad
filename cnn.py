@@ -74,11 +74,11 @@ try:
     # model.add(Dropout(0.2))
     model.add(Conv1D(64, 3, activation='tanh'))
     model.add(MaxPooling1D(3))
-    model.add(Dropout(0.2))
+    # model.add(Dropout(0.2))
     model.add(Conv1D(128, 3, activation='tanh'))
     model.add(Conv1D(256, 3, activation='tanh'))
     model.add(GlobalAveragePooling1D())
-    model.add(Dropout(0.2))
+    # model.add(Dropout(0.2))
     model.add(Dense(2, activation='sigmoid'))
 
     model.compile(loss='categorical_crossentropy',
