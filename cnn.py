@@ -128,6 +128,7 @@ except Exception as e:
     dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     with open(dt + ".log", "w") as f:
         f.write(str(e))
+        print(str(e))
     # os.system("sudo poweroff")  # Shut down virtual machine in case of error
 
 else:
