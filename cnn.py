@@ -15,13 +15,13 @@ import os
 
 def def_model(input_shape):
     model = Sequential()
-    model.add(Conv1D(filters=2, kernel_size=8, strides=2,
+    model.add(Conv1D(filters=32, kernel_size=8, strides=2,
                      input_shape=input_shape, kernel_initializer='uniform',
                      activation='relu'))
-    # model.add(Dropout(0.2))
+    model.add(Dropout(0.5))
     model.add(Conv1D(64, 32, activation='relu'))
     model.add(MaxPooling1D(4))
-    # model.add(Dropout(0.2))
+    model.add(Dropout(0.5))
     model.add(Conv1D(128, 16, activation='relu'))
     model.add(MaxPooling1D(4))
     model.add(Conv1D(256, 8, activation='relu'))
