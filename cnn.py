@@ -49,7 +49,7 @@ def train():
         model.load_weights(weights)
     print("Using weights:", weights)
     print("Dataset shape:", X_train.shape)
-    tbCallback = TensorBoard()
+    tbCallback = TensorBoard(log_dir="logs/{}".format(time()))
     tbCallback.set_model(model)
     esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
