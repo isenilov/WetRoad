@@ -13,10 +13,10 @@ from datetime import datetime
 import os
 
 
-def def_model():
+def def_model(input_shape):
     model = Sequential()
     model.add(Conv1D(filters=2, kernel_size=8, strides=2,
-                     input_shape=X_train.shape[1:], kernel_initializer='uniform',
+                     input_shape=input_shape, kernel_initializer='uniform',
                      activation='relu'))
     # model.add(Dropout(0.2))
     model.add(Conv1D(64, 32, activation='relu'))
@@ -40,6 +40,45 @@ def def_model():
 
 
 def train():
+    X_test, X_train, X_val, y_test, y_train, y_val = ex_feat()
+    start = time()
+    print("\nTraining model...")
+    model = def_model(X_train.shape[1:])
+    weights = get_last("models/cnn/", "weights")
+    if weights is not None:
+        model.load_weights(weights)
+    print("Using weights:", weights)
+    print("Dataset shape:", X_train.shape)
+    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_images=True)
+    esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)
+    model.fit(X_train, y_train, validation_data=(X_val, y_val),
+              batch_size=128, epochs=10, verbose=1, callbacks=[tbCallback, esCallback])
+    dt = datetime.now().strftime("%d-%m-%Y %H-%M")
+    weights_filename = "models/cnn/" + dt + ".h5"
+    model.save_weights(weights_filename)
+    model_filename = "models/cnn/model " + dt + ".yaml"
+    with open(model_filename, "w") as model_yaml:
+        model_yaml.write(model.to_yaml())
+    end = time()
+    training_time = end - start
+    print("\nTook %.3f sec." % training_time)
+    start = time()
+    print("\nEvaluating...")
+    y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
+    print(y_pred, y_test)
+    acc = accuracy_score(y_test, y_pred)
+    print("\nAccuracy:", acc)
+    rec = recall_score(y_test, y_pred, average="macro")
+    print("Recall (wet):", rec)
+    end = time()
+    print("Took %.3f sec." % (end - start))
+    with open('results.txt', 'a') as f:
+        f.write("CNN " + dt + " Input shape: " + str(X_train.shape) + " Accuracy: " + str(acc) +
+                " Reacall: " + str(rec) + " Training time: " + str(training_time) + " s\n")
+        model.summary(print_fn=lambda x: f.write(x + '\n'))
+
+
+def ex_feat():
     start = time()
     print("\nExtracting features...")
     # X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav",
@@ -80,41 +119,8 @@ def train():
     # print(y_train, y_test)
     # end = time()
     # print("Took %.3f sec." % (end - start))
-    start = time()
-    print("\nTraining model...")
-    model = def_model()
-    weights = get_last("models/cnn/", "weights")
-    if weights is not None:
-        model.load_weights(weights)
-    print("Using weights:", weights)
-    print("Dataset shape:", X_train.shape)
-    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_images=True)
-    esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)
-    model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=10, verbose=1, callbacks=[tbCallback, esCallback])
-    dt = datetime.now().strftime("%d-%m-%Y %H-%M")
-    weights_filename = "models/cnn/" + dt + ".h5"
-    model.save_weights(weights_filename)
-    model_filename = "models/cnn/model " + dt + ".yaml"
-    with open(model_filename, "w") as model_yaml:
-        model_yaml.write(model.to_yaml())
-    end = time()
-    training_time = end - start
-    print("\nTook %.3f sec." % training_time)
-    start = time()
-    print("\nEvaluating...")
-    y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
-    print(y_pred, y_test)
-    acc = accuracy_score(y_test, y_pred)
-    print("\nAccuracy:", acc)
-    rec = recall_score(y_test, y_pred, average="macro")
-    print("Recall (wet):", rec)
-    end = time()
-    print("Took %.3f sec." % (end - start))
-    with open('results.txt', 'a') as f:
-        f.write("CNN " + dt + " Input shape: " + str(X_train.shape) + " Accuracy: " + str(acc) +
-                " Reacall: " + str(rec) + " Training time: " + str(training_time) + " s\n")
-        model.summary(print_fn=lambda x: f.write(x + '\n'))
+    return X_test, X_train, X_val, y_test, y_train, y_val
+
 
 if __name__ == '__main__':
     try:
