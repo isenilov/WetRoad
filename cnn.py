@@ -153,6 +153,8 @@ def ex_feat():
 
 
 if __name__ == '__main__':
+    train()
+'''
     try:
         train()
 
@@ -166,3 +168,4 @@ if __name__ == '__main__':
     else:
         pass
         # os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
+'''
