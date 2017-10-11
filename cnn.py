@@ -4,13 +4,43 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from time import time
 from keras.models import Sequential
-from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten
-from keras.layers.wrappers import Bidirectional
+from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
+from keras.layers.wrappers import Bidirectional, TimeDistributed
 from keras.callbacks import TensorBoard, EarlyStopping
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
 import os
+
+
+def def_model_cnn_blstm(input_shape):
+    model = Sequential()
+    model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2,
+                     input_shape=input_shape, kernel_initializer='uniform',
+                     activation='relu')))
+    #model.add(Dropout(0.5))
+    model.add(TimeDistributed(Conv1D(64, 32, activation='relu')))
+    model.add(TimeDistributed(MaxPooling1D(4)))
+    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Conv1D(128, 16, activation='relu')))
+    model.add(TimeDistributed(MaxPooling1D(4)))
+    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Conv1D(256, 8, activation='relu')))
+    # model.add(MaxPooling1D(4))
+    # model.add(Flatten())
+    model.add(TimeDistributed(GlobalAveragePooling1D()))
+    # model.add(Dropout(0.5))
+    model.add(TimeDistributed(Dense(128, activation='relu')))
+    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",)))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
+    model.add(Bidirectional(LSTM(216, activation="tanh")))
+    model.add(Dense(2, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+    model.summary()
+    return model
 
 
 def def_model(input_shape):
