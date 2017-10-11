@@ -32,7 +32,8 @@ def def_model_cnn_blstm(input_shape):
     # model.add(Dropout(0.5))
     model.add(TimeDistributed(Dense(128, activation='relu')))
     model.add(TimeDistributed(Dropout(0.5)))
-    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",)))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
+                            input_shape=input_shape)))
     model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
     model.add(Bidirectional(LSTM(216, activation="tanh")))
     model.add(Dense(2, activation='softmax'))
