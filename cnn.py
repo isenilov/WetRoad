@@ -136,9 +136,9 @@ def ex_feat():
                                       mel=False, flatten=False, scaling=True, categorical=True)
     X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                     mel=False, flatten=False, scaling=True, categorical=True)
-    X_train = np.expand_dims(X_train, axis=2)
-    X_test = np.expand_dims(X_test, axis=2)
-    X_val = np.expand_dims(X_val, axis=2)
+    X_train = np.expand_dims(X_train, axis=1)
+    X_test = np.expand_dims(X_test, axis=1)
+    X_val = np.expand_dims(X_val, axis=1)
 
     X_train = np.expand_dims(X_train, axis=3)
     X_test = np.expand_dims(X_test, axis=3)
