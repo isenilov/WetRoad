@@ -15,7 +15,7 @@ import os
 
 def def_model(input_shape):
     model = Sequential()
-    model.add(Conv1D(filters=32, kernel_size=8, strides=4,
+    model.add(Conv1D(filters=8, kernel_size=8, strides=2,
                      input_shape=input_shape, kernel_initializer='uniform',
                      activation='relu'))
     #model.add(Dropout(0.5))
