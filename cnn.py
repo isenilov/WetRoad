@@ -73,7 +73,7 @@ def train():
     X_test, X_train, X_val, y_test, y_train, y_val = ex_feat()
     start = time()
     print("\nTraining model...")
-    model = def_model_cnn_blstm((X_train.shape[1:],1))
+    model = def_model_cnn_blstm(X_train.shape[1:])
     weights = get_last("models/cnn/", "weights")
     if weights is not None:
         model.load_weights(weights)
