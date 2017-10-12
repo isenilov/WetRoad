@@ -16,8 +16,7 @@ import os
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
     model.add(TimeDistributed(Dense(8), input_shape=input_shape))
-    model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2, kernel_initializer='uniform',
-                     activation='relu')))
+    model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2, activation='relu')))
     #model.add(Dropout(0.5))
     model.add(TimeDistributed(Conv1D(64, 32, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
@@ -137,9 +136,14 @@ def ex_feat():
                                       mel=False, flatten=False, scaling=True, categorical=True)
     X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                     mel=False, flatten=False, scaling=True, categorical=True)
-    X_train = np.expand_dims(X_train, axis=2)
-    X_test = np.expand_dims(X_test, axis=2)
-    X_val = np.expand_dims(X_val, axis=2)
+    X_train = X_train.reshape((X_train.shape[0], int(X_train.shape[1]/2), 2))
+    X_test = X_test.reshape((X_test.shape[0], int(X_test.shape[1] / 2), 2))
+    X_val = X_val.reshape((X_val.shape[0], int(X_val.shape[1] / 2), 2))
+
+
+    # X_train = np.expand_dims(X_train, axis=2)
+    # X_test = np.expand_dims(X_test, axis=2)
+    # X_val = np.expand_dims(X_val, axis=2)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav",
     #                                 "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True)
     end = time()
