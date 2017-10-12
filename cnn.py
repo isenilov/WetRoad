@@ -146,9 +146,9 @@ def ex_feat():
     X_val = X_val.reshape((X_val.shape[0], 2, int(X_val.shape[2] / 2)))
 
 
-    # X_train = np.expand_dims(X_train, axis=2)
-    # X_test = np.expand_dims(X_test, axis=2)
-    # X_val = np.expand_dims(X_val, axis=2)
+    X_train = np.expand_dims(X_train, axis=3)
+    X_test = np.expand_dims(X_test, axis=3)
+    X_val = np.expand_dims(X_val, axis=3)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav",
     #                                 "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True)
     end = time()
