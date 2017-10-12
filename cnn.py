@@ -138,7 +138,7 @@ def ex_feat():
                                     mel=False, flatten=False, scaling=True, categorical=True)
 
     X_train = np.expand_dims(X_train, axis=1)
-    X_test = np.expand_dims(X_test, axis=1)
+    X_test = np.expand_dims(X_test, axis=1)[:-1]
     X_val = np.expand_dims(X_val, axis=1)
     print(X_train.shape)
     X_train = X_train.reshape((int(X_train.shape[0]/2), 2, X_train.shape[2]))
