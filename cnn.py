@@ -138,7 +138,7 @@ def ex_feat():
                                     mel=False, flatten=False, scaling=True, categorical=True)
 
 
-
+    print(X_train.shape)
     X_train = X_train.reshape((X_train.shape[0], 2, int(X_train.shape[1]/2)))
     X_test = X_test.reshape((X_test.shape[0], 2, int(X_test.shape[1] / 2)))
     X_val = X_val.reshape((X_val.shape[0], 2, int(X_val.shape[1] / 2)))
