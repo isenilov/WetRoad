@@ -77,10 +77,10 @@ def train():
         model.load_weights(weights)
     print("Using weights:", weights)
     print("Dataset shape:", X_train.shape)
-    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)
-    esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)
+    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
+    # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=10, verbose=1, callbacks=[tbCallback, esCallback])
+              batch_size=128, epochs=10, verbose=1, callbacks=[tbCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
@@ -139,9 +139,9 @@ def ex_feat():
     X_test = np.expand_dims(X_test, axis=1)
     X_val = np.expand_dims(X_val, axis=1)
 
-    X_train = X_train.reshape((X_train.shape[0], 8, int(X_train.shape[2] / 8)))
-    X_test = X_test.reshape((X_test.shape[0], 8, int(X_test.shape[2] / 8)))
-    X_val = X_val.reshape((X_val.shape[0], 8, int(X_val.shape[2] / 8)))
+    X_train = X_train.reshape((X_train.shape[0], 1, int(X_train.shape[2])))
+    X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
+    X_val = X_val.reshape((X_val.shape[0], 1, int(X_val.shape[2])))
 
     X_train = np.expand_dims(X_train, axis=3)
     X_test = np.expand_dims(X_test, axis=3)
