@@ -15,17 +15,17 @@ import os
 
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
-    #model.add(TimeDistributed(Dense(8), input_shape=input_shape))
+    model.add(TimeDistributed(Dense(8), input_shape=input_shape))
     # model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2, activation='relu')))
     #model.add(Dropout(0.5))
-    model.add(TimeDistributed(Conv1D(8, 8, activation='relu'), input_shape=input_shape))
+    model.add(TimeDistributed(Conv1D(64, 32, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
     # model.add(TimeDistributed(Dropout(0.5)))
     # model.add(TimeDistributed(Conv1D(128, 16, activation='relu')))
     # model.add(TimeDistributed(MaxPooling1D(4)))
     # model.add(TimeDistributed(Dropout(0.5)))
     # model.add(TimeDistributed(Conv1D(256, 8, activation='relu')))
-    # model.add(TimeDistributed(GlobalAveragePooling1D()))
+    model.add(TimeDistributed(GlobalAveragePooling1D()))
     # model.add(Dropout(0.5))
     model.add(TimeDistributed(Dense(128, activation='relu')))
     # model.add(TimeDistributed(Dropout(0.5)))
@@ -139,15 +139,13 @@ def ex_feat():
     X_test = np.expand_dims(X_test, axis=1)
     X_val = np.expand_dims(X_val, axis=1)
 
-    X_train = X_train.reshape((X_train.shape[0], 2, int(X_train.shape[2] / 2)))
-    X_test = X_test.reshape((X_test.shape[0], 2, int(X_test.shape[2] / 2)))
-    X_val = X_val.reshape((X_val.shape[0], 2, int(X_val.shape[2] / 2)))
+    X_train = X_train.reshape((X_train.shape[0], 8, int(X_train.shape[2] / 8)))
+    X_test = X_test.reshape((X_test.shape[0], 8, int(X_test.shape[2] / 8)))
+    X_val = X_val.reshape((X_val.shape[0], 8, int(X_val.shape[2] / 8)))
 
-    # X_train = np.expand_dims(X_train, axis=3)
-    # X_test = np.expand_dims(X_test, axis=3)
-    # X_val = np.expand_dims(X_val, axis=3)
-
-    print(X_train.shape)
+    X_train = np.expand_dims(X_train, axis=3)
+    X_test = np.expand_dims(X_test, axis=3)
+    X_val = np.expand_dims(X_val, axis=3)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav",
     #                                 "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True)
     end = time()
