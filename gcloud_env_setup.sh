@@ -18,6 +18,8 @@ bash Miniconda3-latest-Linux-x86_64.sh
 cd WetRoad
 mkdir models
 mkdir dataset
+cd models
+mkdir cnn
 gcsfuse --implicit-dirs wetroad_dataset ~/WetRoad/dataset
 
 # putting to .bashrc to mount every time it starts
