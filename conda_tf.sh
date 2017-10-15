@@ -19,5 +19,5 @@ cd ~
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
 ./configure
-bazel build --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-msse4.2 --copt=-xMIC-AVX512 -k //tensorflow/tools/pip_package:build_pip_package
+bazel build --copt=-mavx --copt=-mavx2 --copt=-mfma --copt=-mfpmath=both --copt=-msse4.2 --copt=-mavx512f -k //tensorflow/tools/pip_package:build_pip_package
 bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
