@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # installing Anaconda packages
-conda install -y scikit-learn keras
+conda install -y scikit-learn
 conda install -y -c conda-forge librosa
 
 # preparing env for bazel
