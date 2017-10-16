@@ -6,7 +6,7 @@ from time import time
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
 from keras.layers.wrappers import Bidirectional, TimeDistributed
-from keras.callbacks import TensorBoard, EarlyStopping
+# from keras.callbacks import TensorBoard, EarlyStopping
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
@@ -77,7 +77,7 @@ def train():
         model.load_weights(weights)
     print("Using weights:", weights)
     print("Dataset shape:", X_train.shape)
-    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
+    # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
               batch_size=128, epochs=10, verbose=1)
