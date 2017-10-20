@@ -6,7 +6,7 @@ from time import time
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
 from keras.layers.wrappers import Bidirectional, TimeDistributed
-# from keras.callbacks import TensorBoard, EarlyStopping
+from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
@@ -80,9 +80,12 @@ def train():
     print("Dataset shape:", X_train.shape)
     # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
+    mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_loss:.2f}.hdf5", monitor='val_loss', verbose=0, save_best_only=False,
+                                    save_weights_only=False, mode='auto', period=1)
+
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=10, verbose=1)
-              # ,callbacks=[tbCallback]) #, esCallback])
+              batch_size=128, epochs=10, verbose=1,
+              callbacks=[mcCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
