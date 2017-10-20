@@ -81,7 +81,7 @@ def train():
     # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_loss:.2f}.h5", monitor='val_loss', verbose=0, save_best_only=False,
-                                    save_weights_only=False, mode='auto', period=1)
+                                    save_weights_only=True, mode='auto', period=1)
 
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
               batch_size=128, epochs=10, verbose=1,
