@@ -29,10 +29,10 @@ def def_model_cnn_blstm(input_shape):
     # model.add(Dropout(0.5))
     model.add(TimeDistributed(Dense(128, activation='relu')))
     # model.add(TimeDistributed(Dropout(0.5)))
-    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="relu")))
     # model.add(TimeDistributed(Dropout(0.5)))
-    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
-    model.add(Bidirectional(LSTM(216, activation="tanh")))
+    model.add(Bidirectional(LSTM(216, return_sequences=True, activation="relu")))
+    model.add(Bidirectional(LSTM(216, activation="relu")))
     model.add(Dense(2, activation='softmax'))
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
@@ -81,7 +81,7 @@ def train():
     # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=1, verbose=1)
+              batch_size=128, epochs=10, verbose=1)
               # ,callbacks=[tbCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
