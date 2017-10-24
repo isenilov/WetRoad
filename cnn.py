@@ -32,7 +32,7 @@ def def_model_cnn_blstm(input_shape):
     model.add(TimeDistributed(Conv1D(256, 1, activation='relu')))
     model.add(TimeDistributed(GlobalAveragePooling1D()))
     # model.add(Dropout(0.5))
-    model.add(TimeDistributed(Dense(128, activation='relu')))
+    # model.add(TimeDistributed(Dense(128, activation='relu')))
     # model.add(TimeDistributed(Dropout(0.5)))
     # model.add(Bidirectional(LSTM(216, return_sequences=True, activation="relu")))
     # model.add(TimeDistributed(Dropout(0.5)))
