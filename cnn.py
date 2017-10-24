@@ -29,7 +29,7 @@ def def_model_cnn_blstm(input_shape):
     model.add(TimeDistributed(Conv1D(256, 8, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
     model.add(TimeDistributed(Dropout(0.5)))
-    model.add(TimeDistributed(Conv1D(256, 8, activation='relu')))
+    model.add(TimeDistributed(Conv1D(256, 2, activation='relu')))
     model.add(TimeDistributed(GlobalAveragePooling1D()))
     # model.add(Dropout(0.5))
     model.add(TimeDistributed(Dense(128, activation='relu')))
