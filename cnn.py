@@ -15,8 +15,8 @@ import os
 
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
-    model.add(TimeDistributed(Dense(8), input_shape=input_shape))
-    model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2, activation='relu')))
+    # model.add(TimeDistributed(Dense(8), input_shape=input_shape))
+    model.add(TimeDistributed(Conv1D(filters=8, kernel_size=8, strides=2, activation='relu', input_shape=input_shape)))
     model.add(TimeDistributed(Conv1D(32, 16, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
     model.add(TimeDistributed(Dropout(0.5)))
