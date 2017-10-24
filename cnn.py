@@ -84,7 +84,7 @@ def train():
     print("Using weights:", weights)
     print("Dataset shape:", X_train.shape)
 
-    tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
+    # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
@@ -92,7 +92,7 @@ def train():
 
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
               batch_size=128, epochs=50, verbose=1,
-              callbacks=[mcCallback, tbCallback]) #, esCallback])
+              callbacks=[mcCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
