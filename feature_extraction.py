@@ -1,14 +1,14 @@
 from scipy.io import wavfile
 import numpy as np
 from scipy import signal
-from librosa import feature, effects
+from librosa import feature, effects, load
 from sklearn.preprocessing import minmax_scale
 import os.path
 import pickle
 
 
 def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
-    rate, frames = wavfile.read(wav_file)
+    frames, rate = load(wav_file)
     window = round(window_length * rate)
     feat = []
 
