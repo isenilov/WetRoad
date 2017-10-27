@@ -1,7 +1,7 @@
 from scipy.io import wavfile
 import numpy as np
 from scipy import signal
-from librosa import feature
+from librosa import feature, effects
 from sklearn.preprocessing import minmax_scale
 import os.path
 import pickle
@@ -25,6 +25,9 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
             feat.append(pxx.flatten())
         else:
             feat.append(pxx)
+            '''TODO: experiments with augmentation'''
+            feat.append(effects.pitch_shift(pxx, rate, n_steps=4.))
+            feat.append(effects.pitch_shift(pxx, rate, n_steps=-4.))
     return np.stack(feat)
 
 
