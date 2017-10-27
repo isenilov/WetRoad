@@ -134,18 +134,18 @@ def ex_feat():
     # X_test, y_test = extract_features("dataset/wet/chevy_wet.wav",
     #                                   "dataset/dry/chevy_dry.wav", flatten=False, scaling=False)
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
-    X_train, y_train = extract_features("dataset/wet/test_wet.wav",
-                                        "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
-    X_test, y_test = extract_features("dataset/wet/test_wet.wav",
-                                      "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
-    X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
-                                    mel=False, flatten=False, scaling=True, categorical=True)
-    # X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
-    #                                     mel=False, flatten=False, scaling=True, categorical=True)
-    # X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
-    #                                   mel=False, flatten=False, scaling=True, categorical=True)
-    # X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+    # X_train, y_train = extract_features("dataset/wet/test_wet.wav",
+    #                                     "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+    # X_test, y_test = extract_features("dataset/wet/test_wet.wav",
+    #                                   "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True, categorical=True)
+    # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
+    X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
+                                        mel=False, flatten=False, scaling=True, categorical=True)
+    X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+                                      mel=False, flatten=False, scaling=True, categorical=True)
+    X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+                                    mel=False, flatten=False, scaling=True, categorical=True)
 
     X_train = np.expand_dims(X_train, axis=1)
     X_test = np.expand_dims(X_test, axis=1)
