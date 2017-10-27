@@ -10,7 +10,7 @@ import pickle
 def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
     frames, rate = load(wav_file)
     window = round(window_length * rate)
-    feat = np.ndarray()
+    feat = []
 
     for i in range(0, len(frames)-window, int(window/2)):
         if mel:
