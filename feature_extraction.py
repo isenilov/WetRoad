@@ -7,8 +7,8 @@ import os.path
 import pickle
 
 
-def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
-    frames, rate = load(wav_file)
+def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True, augment=False):
+    frames, rate = load(wav_file, sr=44100)
     window = round(window_length * rate)
     feat = []
 
@@ -20,19 +20,19 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
                                hop_length=round(nfft / 2),
                                fmax=8000))
         else:
-            pxx = frames[i:i + window]
+            pxx = np.array(frames[i:i + window])
         if flatten:
             feat.append(pxx.flatten())
         else:
             feat.append(pxx)
             '''TODO: experiments with augmentation'''
-            #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=4.0))
-            #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=-4.0))
-        print(feat)
+            if augment:
+                feat.append(effects.pitch_shift(pxx, rate, n_steps=4.0))
+                feat.append(effects.pitch_shift(pxx, rate, n_steps=-4.0))
     return np.stack(feat)
 
 
-def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True):
+def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True, augment=False):
     to_replace ="\\/"
     for char in to_replace:
         fw = file_wet.replace(char, "_")
@@ -43,8 +43,9 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
         with open(pickle_file, "rb") as f:
             features, labels = pickle.load(f)
         return features, labels
-    features_wet = extract(file_wet, mel=mel, flatten=flatten)
-    features_dry = extract(file_dry, mel=mel, flatten=flatten)
+    features_wet = extract(file_wet, mel=mel, flatten=flatten, augment=augment)
+    features_dry = extract(file_dry, mel=mel, flatten=flatten, augment=augment)
+    print(features_dry, features_dry.shape)
     labels_wet = np.ones(features_wet.shape[0])
     labels_dry = np.zeros(features_dry.shape[0])
     features = np.concatenate((features_wet, features_dry))
