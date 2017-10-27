@@ -20,15 +20,15 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
                                hop_length=round(nfft / 2),
                                fmax=8000))
         else:
-            pxx = np.array(frames[i:i + window])
+            pxx = frames[i:i + window]
         if flatten:
-            np.append(pxx, pxx.flatten())
+            feat.append(pxx.flatten())
         else:
-            np.append(feat, pxx)
+            feat.append(pxx)
             '''TODO: experiments with augmentation'''
-            np.append(feat, effects.pitch_shift(pxx, rate, n_steps=4.0))
-            np.append(feat, effects.pitch_shift(pxx, rate, n_steps=-4.0))
-            print(feat.shape)
+            #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=4.0))
+            #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=-4.0))
+            #print(feat.shape)
     return np.stack(feat)
 
 
