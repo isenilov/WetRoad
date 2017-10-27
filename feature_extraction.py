@@ -10,24 +10,25 @@ import pickle
 def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
     frames, rate = load(wav_file)
     window = round(window_length * rate)
-    feat = []
+    feat = np.ndarray()
 
     for i in range(0, len(frames)-window, int(window/2)):
         if mel:
-            pxx = feature.mfcc(frames[i:i + window - 1],
+            pxx = np.array(feature.mfcc(frames[i:i + window - 1],
                                sr=rate,
                                n_fft=nfft,
                                hop_length=round(nfft / 2),
-                               fmax=8000)
+                               fmax=8000))
         else:
-            pxx = frames[i:i + window]
+            pxx = np.array(frames[i:i + window])
         if flatten:
-            feat.append(pxx.flatten())
+            np.append(pxx, pxx.flatten())
         else:
-            feat.append(pxx)
+            np.append(feat, pxx)
             '''TODO: experiments with augmentation'''
-            feat.append(effects.pitch_shift(pxx, rate, n_steps=4.0))
-            feat.append(effects.pitch_shift(pxx, rate, n_steps=-4.0))
+            np.append(feat, effects.pitch_shift(pxx, rate, n_steps=4.0))
+            np.append(feat, effects.pitch_shift(pxx, rate, n_steps=-4.0))
+            print(feat.shape)
     return np.stack(feat)
 
 
