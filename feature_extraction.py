@@ -28,7 +28,7 @@ def extract(wav_file, nfft=64, window_length=0.03, mel=True, flatten=True):
             '''TODO: experiments with augmentation'''
             #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=4.0))
             #np.append(feat, effects.pitch_shift(pxx, rate, n_steps=-4.0))
-            #print(feat.shape)
+        print(feat)
     return np.stack(feat)
 
 
