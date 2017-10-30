@@ -33,10 +33,10 @@ def def_model_cnn_blstm(input_shape):
     # model.add(TimeDistributed(GlobalAveragePooling1D()))
 
     model.add(Conv1D(filters=8, kernel_size=64, strides=2, activation='relu', input_shape=input_shape))
-    model.add(Conv1D(32, 32, activation='relu'))
+    model.add(Conv1D(64, 32, activation='relu'))
     model.add(MaxPooling1D(4))
     model.add(Dropout(0.5))
-    model.add(Conv1D(64, 16, activation='relu'))
+    model.add(Conv1D(64, 32, activation='relu'))
     model.add(MaxPooling1D(4))
     model.add(Dropout(0.5))
     model.add(Conv1D(128, 8, activation='relu'))
