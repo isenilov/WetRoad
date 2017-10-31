@@ -15,7 +15,6 @@ import os
 
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
-    # model.add(TimeDistributed(Dense(8), input_shape=input_shape))
     # model.add(TimeDistributed(Conv1D(filters=8, kernel_size=64, strides=2, activation='relu'), input_shape=input_shape))
     # model.add(TimeDistributed(Conv1D(32, 32, activation='relu')))
     # model.add(TimeDistributed(MaxPooling1D(4)))
@@ -47,6 +46,8 @@ def def_model_cnn_blstm(input_shape):
     model.add(Dropout(0.5))
     model.add(Conv1D(256, 1, activation='relu'))
     model.add(GlobalAveragePooling1D())
+    model.add(Dense(128, activation='relu'))
+    # model.add(Dropout(0.5))
 
     # model.add(Dropout(0.5))
     # model.add(TimeDistributed(Dense(128, activation='relu')))
@@ -94,7 +95,7 @@ def train():
     X_test, X_train, X_val, y_test, y_train, y_val = ex_feat()
     start = time()
     print("\nTraining model...")
-    model = def_model(X_train.shape[1:])
+    model = def_model_cnn_blstm(X_train.shape[1:])
     weights = get_last("models/cnn/", "weights")
     if weights is not None:
         model.load_weights(weights)
