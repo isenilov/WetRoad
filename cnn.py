@@ -194,6 +194,7 @@ def ex_feat():
 
 
 if __name__ == '__main__':
+    np.random.seed(1)
     train()
 '''
     try:
