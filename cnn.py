@@ -49,8 +49,8 @@ def def_model_cnn_blstm(input_shape):
     # model.add(Dense(128, activation='relu'))
     # model.add(Dropout(0.5))
 
-    # model.add(TimeDistributed(Dense(128, activation='relu')))
-    # model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Dense(128, activation='relu')))
+    model.add(TimeDistributed(Dropout(0.5)))
     model.add(Bidirectional(LSTM(216, return_sequences=True)))
     model.add(TimeDistributed(Dropout(0.5)))
     model.add(Bidirectional(LSTM(216, return_sequences=True)))
@@ -168,9 +168,9 @@ def ex_feat():
     X_test = np.expand_dims(X_test, axis=1)
     X_val = np.expand_dims(X_val, axis=1)
 
-    # X_train = X_train.reshape((X_train.shape[0], 1, int(X_train.shape[2])))
-    # X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
-    # X_val = X_val.reshape((X_val.shape[0], 1, int(X_val.shape[2])))
+    X_train = X_train.reshape((X_train.shape[0], 1, int(X_train.shape[2])))
+    X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
+    X_val = X_val.reshape((X_val.shape[0], 1, int(X_val.shape[2])))
 
     X_train = X_train.reshape((X_train.shape[0], int(X_train.shape[2]), 1))
     X_test = X_test.reshape((X_test.shape[0], int(X_test.shape[2]), 1))
