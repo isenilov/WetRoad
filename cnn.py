@@ -1,5 +1,6 @@
 from feature_extraction import extract_features, get_last
 from sklearn.metrics import recall_score, accuracy_score
+from sklearn.utils import shuffle
 import numpy as np
 from sklearn.model_selection import train_test_split
 from time import time
@@ -157,8 +158,8 @@ def ex_feat():
     #                                   mel=False, flatten=False, scaling=True, categorical=True)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_train, y_train = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
-                                        mel=False, flatten=False, scaling=True, categorical=True, augment=True)
+    X_train, y_train = shuffle(extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
+                                        mel=False, flatten=False, scaling=True, categorical=True, augment=True), random_state=1)
     X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
     X_val, y_val = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
