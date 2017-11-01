@@ -172,9 +172,9 @@ def ex_feat():
     X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
     X_val = X_val.reshape((X_val.shape[0], 1, int(X_val.shape[2])))
 
-    X_train = X_train.reshape((X_train.shape[0], int(X_train.shape[2]), 1))
-    X_test = X_test.reshape((X_test.shape[0], int(X_test.shape[2]), 1))
-    X_val = X_val.reshape((X_val.shape[0], int(X_val.shape[2]), 1))
+    # X_train = X_train.reshape((X_train.shape[0], int(X_train.shape[2]), 1))
+    # X_test = X_test.reshape((X_test.shape[0], int(X_test.shape[2]), 1))
+    # X_val = X_val.reshape((X_val.shape[0], int(X_val.shape[2]), 1))
 
     # X_train = np.expand_dims(X_train, axis=3)
     # X_test = np.expand_dims(X_test, axis=3)
