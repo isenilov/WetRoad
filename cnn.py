@@ -50,7 +50,7 @@ def def_model_cnn_blstm(input_shape):
     # model.add(Dense(128, activation='relu'))
     # model.add(Dropout(0.5))
 
-    model.add(TimeDistributed(Dense(128, activation='relu')))
+    # model.add(TimeDistributed(Dense(128, activation='relu')))
     # model.add(TimeDistributed(Dropout(0.5)))
     model.add(Bidirectional(LSTM(256, return_sequences=True)))
     # model.add(TimeDistributed(Dropout(0.5)))
