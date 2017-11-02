@@ -109,7 +109,7 @@ def train():
                                  mode='auto', period=1)  # saving weights every epoch
 
     model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=50, verbose=2,
+              batch_size=128, epochs=50, verbose=1,
               callbacks=[mcCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
     weights_filename = "models/cnn/" + dt + ".h5"
