@@ -58,7 +58,7 @@ def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, 
     if scaling and flatten:
         features = minmax_scale(features)
     with open(pickle_file, "wb") as f:
-        pickle.dump((features, labels), f)
+        pickle.dump((features, labels), f, protocol=4)
     return features, labels
 
 
