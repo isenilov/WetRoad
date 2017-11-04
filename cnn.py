@@ -17,18 +17,20 @@ import os
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
     model.add(TimeDistributed(Conv1D(filters=8, kernel_size=64, strides=2, activation='relu'), input_shape=input_shape))
+    model.add(TimeDistributed(MaxPooling1D(4)))
+    model.add(TimeDistributed(Dropout(0.3)))
     model.add(TimeDistributed(Conv1D(32, 32, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Dropout(0.3)))
     model.add(TimeDistributed(Conv1D(64, 16, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Dropout(0.3)))
     model.add(TimeDistributed(Conv1D(128, 8, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Dropout(0.3)))
     model.add(TimeDistributed(Conv1D(256, 2, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.5)))
+    model.add(TimeDistributed(Dropout(0.3)))
     model.add(TimeDistributed(Conv1D(256, 1, activation='relu')))
     model.add(TimeDistributed(GlobalAveragePooling1D()))
 
@@ -55,7 +57,7 @@ def def_model_cnn_blstm(input_shape):
     model.add(Bidirectional(LSTM(256, return_sequences=True)))
     # model.add(TimeDistributed(Dropout(0.5)))
     # model.add(Bidirectional(LSTM(256, return_sequences=True)))
-    model.add(Bidirectional(LSTM(256)))
+    # model.add(Bidirectional(LSTM(256)))
     model.add(Dense(2, activation='softmax'))
     model.compile(loss='categorical_crossentropy',
                   optimizer='adagrad',
