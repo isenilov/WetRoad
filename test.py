@@ -8,7 +8,7 @@ if model is not None:
     loaded_model_file = yaml_file.read()
     yaml_file.close()
     loaded_model = model_from_yaml(loaded_model_file)
-    loaded_model.load_weights("model.h5")
+    loaded_model.load_weights(get_last("", "weights"))
     loaded_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     X_test, y_test = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
