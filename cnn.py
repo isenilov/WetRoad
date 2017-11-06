@@ -116,15 +116,17 @@ def train():
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
 
-    model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=50, verbose=1,
-              callbacks=[mcCallback]) #, esCallback])
     dt = datetime.now().strftime("%d-%m-%Y %H-%M")
-    weights_filename = "models/cnn/" + dt + ".h5"
-    model.save_weights(weights_filename)
     model_filename = "models/cnn/model " + dt + ".yaml"
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
+
+    model.fit(X_train, y_train, validation_data=(X_val, y_val),
+              batch_size=128, epochs=50, verbose=1,
+              callbacks=[mcCallback]) #, esCallback])
+
+    weights_filename = "models/cnn/" + dt + ".h5"
+    model.save_weights(weights_filename)
     end = time()
     training_time = end - start
     print("\nTook %.3f sec." % training_time)
