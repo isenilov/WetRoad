@@ -116,8 +116,8 @@ def train():
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
 
-    dt = datetime.now().strftime("%d-%m-%Y %H-%M")
-    model_filename = "models/cnn/model " + dt + ".yaml"
+    dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
+    model_filename = "models/cnn/model." + dt + ".yaml"
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
