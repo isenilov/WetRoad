@@ -63,7 +63,7 @@ def def_model_cnn_blstm(input_shape):
     # model.add(Bidirectional(LSTM(256, return_sequences=True)))
     # model.add(TimeDistributed(Dropout(0.5)))
     # model.add(Bidirectional(LSTM(256, return_sequences=True)))
-    model.add(Bidirectional(LSTM(256, dropout=0.3, recurrent_dropout=0.3)))
+    model.add(Bidirectional(LSTM(256)))
     model.add(Dense(2, activation='softmax'))
     model.compile(loss='categorical_crossentropy',
                   optimizer='adagrad',
