@@ -73,7 +73,7 @@ model.compile(loss='categorical_crossentropy',
           metrics=['accuracy'])
 weights = get_last("models/", "weights")
 if weights is not None:
-model.load_weights(weights)
+    model.load_weights(weights)
 print("Using weights:", weights)
 model.fit(X_train, y_train,
 #          validation_data=(X_val, y_val),
@@ -87,7 +87,7 @@ weights_filename = "models/weights " + dt + ".h5"
 model.save_weights(weights_filename)
 model_filename = "models/model " + dt + ".yaml"
 with open(model_filename, "w") as model_yaml:
-model_yaml.write(model.to_yaml())
+    model_yaml.write(model.to_yaml())
 end = time()
 training_time = end - start
 print("\nTook %.3f sec." % training_time)
