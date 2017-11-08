@@ -110,11 +110,12 @@ try:
         model.summary(print_fn=lambda x: f.write(x + '\n'))
 
 except Exception as e:
-    dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
-    with open(dt + ".log", "w") as f:
-        f.write(str(e))
-    # os.system("sudo poweroff")  # Shut down virtual machine in case of error
-
-else:
     pass
-    # os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
+#     dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
+#     with open(dt + ".log", "w") as f:
+#         f.write(str(e))
+#     os.system("sudo poweroff")  # Shut down virtual machine in case of error
+#
+# else:
+#     pass
+#     os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
