@@ -45,9 +45,9 @@ X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chev
                               mel=True, flatten=False, scaling=True, categorical=True)
 X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                             mel=True, flatten=False, scaling=True, categorical=True)
-X_train = np.expand_dims(X_train, axis=1)
-X_test = np.expand_dims(X_test, axis=1)
-X_val = np.expand_dims(X_val, axis=1)
+# X_train = np.expand_dims(X_train, axis=1)
+# X_test = np.expand_dims(X_test, axis=1)
+# X_val = np.expand_dims(X_val, axis=1)
 end = time()
 print("Took %.3f sec." % (end - start))
 
