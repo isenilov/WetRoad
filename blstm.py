@@ -73,6 +73,7 @@ model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
 model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
 model.add(Bidirectional(LSTM(216, activation="tanh")))
 model.add(Dense(2, activation='softmax'))
+model.summary()
 optimizer = optimizers.Adam(lr=1e-5)
 model.compile(loss='categorical_crossentropy',
           optimizer=optimizer,
