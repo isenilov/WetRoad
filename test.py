@@ -12,6 +12,7 @@ if model is not None and weights is not None:
     loaded_model.load_weights(weights)
     print("Using model: " + model, "\nUsing weights: " + weights + "\n")
     loaded_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    loaded_model.summary()
     X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
     # X_test = np.expand_dims(X_test, axis=1)
