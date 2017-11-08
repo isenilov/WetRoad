@@ -1,3 +1,4 @@
+from sklearn.utils import shuffle
 from feature_extraction import extract_features, get_last
 from sklearn.metrics import recall_score, accuracy_score
 import numpy as np
@@ -15,18 +16,18 @@ import os
 try:
     start = time()
     print("\nExtracting features...")
-    X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav",
-                                "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
-    X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav",
-                                "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
-    X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav",
-                                "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
-
-    X_train = np.concatenate((X_1, X_2, X_3))
-    y_train = np.concatenate((y_1, y_2, y_3))
-
-    X_test, y_test = extract_features("dataset/wet/chevy_wet.wav",
-                                      "dataset/dry/chevy_dry.wav", flatten=False, scaling=False)
+    # X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav",
+    #                             "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
+    # X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav",
+    #                             "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
+    # X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav",
+    #                             "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
+    #
+    # X_train = np.concatenate((X_1, X_2, X_3))
+    # y_train = np.concatenate((y_1, y_2, y_3))
+    #
+    # X_test, y_test = extract_features("dataset/wet/chevy_wet.wav",
+    #                                   "dataset/dry/chevy_dry.wav", flatten=False, scaling=False)
 
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
@@ -38,12 +39,13 @@ try:
     #                                 "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 
 
-    # X_train, y_train = extract_features("dataset/wet1/audio_mono.wav",
-    #                                     "dataset/dry1/audio_mono.wav", flatten=False, scaling=False)
-    # X_test, y_test = extract_features("dataset/wet2/audio_mono.wav",
-    #                                   "dataset/dry2/audio_mono.wav", flatten=False, scaling=False)
-    # X_val, y_val = extract_features("dataset/wet3/audio_mono.wav",
-    #                                 "dataset/dry3/audio_mono.wav", flatten=False, scaling=False)
+    X_train, y_train = shuffle(extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+                                                mel=False, flatten=False, scaling=True, categorical=True),
+                               random_state=1)
+    X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+                                      mel=False, flatten=False, scaling=True, categorical=True)
+    X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+                                    mel=False, flatten=False, scaling=True, categorical=True)
     end = time()
     print("Took %.3f sec." % (end - start))
 
@@ -111,7 +113,8 @@ except Exception as e:
     dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
     with open(dt + ".log", "w") as f:
         f.write(str(e))
-    os.system("sudo poweroff")  # Shut down virtual machine in case of error
+    # os.system("sudo poweroff")  # Shut down virtual machine in case of error
 
 else:
-    os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
+    pass
+    # os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
