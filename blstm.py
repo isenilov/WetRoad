@@ -38,10 +38,10 @@ print("\nExtracting features...")
 #                                 "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 
 
-X_train, y_train = shuffle(extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+X_train, y_train = shuffle(extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
                                         mel=True, flatten=False, scaling=True, categorical=True),
                        random_state=1)
-X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+X_test, y_test = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                               mel=True, flatten=False, scaling=True, categorical=True)
 X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                             mel=True, flatten=False, scaling=True, categorical=True)
