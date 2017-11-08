@@ -39,12 +39,12 @@ print("\nExtracting features...")
 
 
 X_train, y_train = shuffle(extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                                        mel=False, flatten=False, scaling=True, categorical=True),
+                                        mel=True, flatten=False, scaling=True, categorical=True),
                        random_state=1)
 X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
-                              mel=False, flatten=False, scaling=True, categorical=True)
+                              mel=True, flatten=False, scaling=True, categorical=True)
 X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
-                            mel=False, flatten=False, scaling=True, categorical=True)
+                            mel=True, flatten=False, scaling=True, categorical=True)
 X_train = np.expand_dims(X_train, axis=1)
 X_test = np.expand_dims(X_test, axis=1)
 X_val = np.expand_dims(X_val, axis=1)
@@ -70,8 +70,8 @@ model = Sequential()
 model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh",
                          ),
                     input_shape=(X_train.shape[1], X_train.shape[2])))
-model.add(Bidirectional(LSTM(216, return_sequences=True, activation="tanh")))
-model.add(Bidirectional(LSTM(216, activation="tanh")))
+model.add(Bidirectional(LSTM(216, return_sequences=True, activation="relu")))
+model.add(Bidirectional(LSTM(216, activation="relu")))
 model.add(Dense(2, activation='softmax'))
 model.summary()
 optimizer = optimizers.Adam(lr=1e-5)
