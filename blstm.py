@@ -25,7 +25,7 @@ class TestCallback(Callback):
         loss, acc = self.model.evaluate(x, y, verbose=0)
         log_filename = "models/log." + dt + ".log"
         with open(log_filename, "w") as log:
-            log.write("\nDataset number: {}, epoch: {}, loss: {}, acc: {}\n".format(self.number, epoch, loss, acc))
+            log.write("\nDataset number: {}, epoch: {}, loss: {}, acc: {}\n".format(self.number, ep, loss, acc))
 
 
 start = time()
@@ -106,6 +106,7 @@ if weights is not None:
 print("Using weights:", weights)
 hist = model.fit(X_train, y_train,
                  callbacks=[tbCallback, mcCallback, testCallback0, testCallback1, testCallback2, testCallback3],
+                 validation_data=(X_1, y_1),
                  epochs=2,
                  batch_size=128,
                  verbose=1)
