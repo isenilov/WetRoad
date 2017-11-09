@@ -107,7 +107,7 @@ print("Using weights:", weights)
 hist = model.fit(X_train, y_train,
                  callbacks=[tbCallback, mcCallback, testCallback0, testCallback1, testCallback2, testCallback3],
                  validation_data=(X_1, y_1),
-                 epochs=2,
+                 epochs=75,
                  batch_size=128,
                  verbose=1)
 
