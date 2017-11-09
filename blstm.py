@@ -25,7 +25,7 @@ class TestCallback(Callback):
         loss, acc = self.model.evaluate(x, y, verbose=0)
         log_filename = "models/log." + dt + ".log"
         with open(log_filename, "w") as log:
-            log.write("\nDataset number: {}, epoch: {}, loss: {}, acc: {}\n".format(self.number, ep, loss, acc))
+            log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
 
 
 start = time()
