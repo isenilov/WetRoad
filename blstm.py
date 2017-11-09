@@ -24,7 +24,7 @@ class TestCallback(Callback):
         x, y = self.test_data
         loss, acc = self.model.evaluate(x, y, verbose=0)
         log_filename = "models/log." + dt + ".csv"
-        with open(log_filename, "w") as log:
+        with open(log_filename, "a") as log:
             log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
 
 
