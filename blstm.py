@@ -82,13 +82,13 @@ weights = get_last("models/", "weights")
 if weights is not None:
     model.load_weights(weights)
 print("Using weights:", weights)
-model.fit(X_train, y_train,
-      validation_data=(X_val, y_val),
-      callbacks=[tbCallback, mcCallback],
-      epochs=50,
-      batch_size=128,
-      verbose=1)
-
+hist = model.fit(X_train, y_train,
+                 validation_data=(X_val, y_val),
+                 callbacks=[tbCallback, mcCallback],
+                 epochs=2,
+                 batch_size=128,
+                 verbose=1)
+print(hist.history)
 dt = datetime.now().strftime("%d-%m-%Y %H-%M")
 # weights_filename = "models/weights " + dt + ".h5"
 # model.save_weights(weights_filename)
