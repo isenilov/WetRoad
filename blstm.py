@@ -23,7 +23,7 @@ class TestCallback(Callback):
     def on_epoch_end(self, epoch, logs={}):
         x, y = self.test_data
         loss, acc = self.model.evaluate(x, y, verbose=0)
-        log_filename = "models/log." + dt + ".log"
+        log_filename = "models/log." + dt + ".csv"
         with open(log_filename, "w") as log:
             log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
 
@@ -120,16 +120,16 @@ end = time()
 training_time = end - start
 print("\nTook %.3f sec." % training_time)
 
-start = time()
-print("\nEvaluating...")
-y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
-print(y_pred, y_test)
-acc = accuracy_score(y_test, y_pred)
-print("\nAccuracy:", acc)
-rec = recall_score(y_test, y_pred, average="macro")
-print("Recall (wet):", rec)
-end = time()
-print("Took %.3f sec." % (end - start))
+# start = time()
+# print("\nEvaluating...")
+# y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
+# print(y_pred, y_test)
+# acc = accuracy_score(y_test, y_pred)
+# print("\nAccuracy:", acc)
+# rec = recall_score(y_test, y_pred, average="macro")
+# print("Recall (wet):", rec)
+# end = time()
+# print("Took %.3f sec." % (end - start))
 
 # with open('results.txt', 'a') as f:
 # f.write("BLSTM " + dt + " Input shape: " + str(X_train.shape) + " Accuracy: " + str(acc) +
