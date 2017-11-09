@@ -7,11 +7,26 @@ from time import time
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.layers.wrappers import Bidirectional
-from keras.callbacks import TensorBoard, ModelCheckpoint
+from keras.callbacks import TensorBoard, ModelCheckpoint, Callback
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
 import os
+
+
+# Writing evaluation of the model on dataset to file
+class TestCallback(Callback):
+    def __init__(self, test_data, number):
+        self.test_data = test_data
+        self.number = number
+
+    def on_epoch_end(self, epoch, logs={}):
+        x, y = self.test_data
+        loss, acc = self.model.evaluate(x, y, verbose=0)
+        log_filename = "models/log." + dt + ".log"
+        with open(log_filename, "w") as log:
+            log.write("\nDataset number: {}, epoch: {}, loss: {}, acc: {}\n".format(self.number, epoch, loss, acc))
+
 
 start = time()
 print("\nExtracting features...")
@@ -38,13 +53,15 @@ print("\nExtracting features...")
 #                                 "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 
 
-X_train, y_train = shuffle(extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
-                                        mel=True, flatten=False, scaling=True, categorical=True),
-                       random_state=1)
-X_test, y_test = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                              mel=True, flatten=False, scaling=True, categorical=True)
-X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
-                            mel=True, flatten=False, scaling=True, categorical=True)
+X_train, y_train = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+                                    mel=True, flatten=False, scaling=True, categorical=True)
+X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
+                                  mel=True, flatten=False, scaling=True, categorical=True)
+X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+                                  mel=True, flatten=False, scaling=True, categorical=True)
+X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+                                  mel=True, flatten=False, scaling=True, categorical=True)
+
 # X_train = np.expand_dims(X_train, axis=1)
 # X_test = np.expand_dims(X_test, axis=1)
 # X_val = np.expand_dims(X_val, axis=1)
@@ -59,11 +76,16 @@ print("Took %.3f sec." % (end - start))
 # print("Took %.3f sec." % (end - start))
 
 start = time()
+dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
 print("\nTraining model...")
 tbCallback = TensorBoard()
 mcCallback = ModelCheckpoint("models/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
+testCallback0 = TestCallback((X_train, y_train), 0)
+testCallback1 = TestCallback((X_1, y_1), 1)
+testCallback2 = TestCallback((X_2, y_2), 2)
+testCallback3 = TestCallback((X_3, y_3), 3)
 
 # architecture of the network is adopted from https://arxiv.org/pdf/1511.07035.pdf
 model = Sequential()
@@ -83,13 +105,11 @@ if weights is not None:
     model.load_weights(weights)
 print("Using weights:", weights)
 hist = model.fit(X_train, y_train,
-                 validation_data=(X_val, y_val),
-                 callbacks=[tbCallback, mcCallback],
+                 callbacks=[tbCallback, mcCallback, testCallback0, testCallback1, testCallback2, testCallback3],
                  epochs=2,
                  batch_size=128,
                  verbose=1)
-print(hist.history)
-dt = datetime.now().strftime("%d-%m-%Y %H-%M")
+
 # weights_filename = "models/weights " + dt + ".h5"
 # model.save_weights(weights_filename)
 model_filename = "models/model " + dt + ".yaml"
