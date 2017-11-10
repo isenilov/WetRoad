@@ -53,13 +53,13 @@ print("\nExtracting features...")
 #                                 "dataset/dry/test_dry.wav", flatten=False, scaling=False)
 
 
-X_train, y_train = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+X_train, y_train = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                     mel=True, flatten=False, scaling=True, categorical=True)
 X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                   mel=True, flatten=False, scaling=True, categorical=True)
 X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                                   mel=True, flatten=False, scaling=True, categorical=True)
-X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+X_3, y_3 = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
                                   mel=True, flatten=False, scaling=True, categorical=True)
 
 # X_train = np.expand_dims(X_train, axis=1)
@@ -82,10 +82,10 @@ tbCallback = TensorBoard()
 mcCallback = ModelCheckpoint("models/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
-testCallback0 = TestCallback((X_train, y_train), 0)
+testCallback0 = TestCallback((X_train, y_train), 3)
 testCallback1 = TestCallback((X_1, y_1), 1)
 testCallback2 = TestCallback((X_2, y_2), 2)
-testCallback3 = TestCallback((X_3, y_3), 3)
+testCallback3 = TestCallback((X_3, y_3), "chevy")
 
 # architecture of the network is adopted from https://arxiv.org/pdf/1511.07035.pdf
 model = Sequential()
