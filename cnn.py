@@ -187,7 +187,7 @@ def ex_feat():
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
     X_train, y_train = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                                        mel=False, flatten=False, scaling=True, categorical=True)
+                                        mel=False, flatten=False, scaling=True, categorical=True, augment=True)
     X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
     X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
