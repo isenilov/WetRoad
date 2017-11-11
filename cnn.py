@@ -7,13 +7,24 @@ from time import time
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
 from keras.layers.wrappers import Bidirectional, TimeDistributed
-from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
+from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint, Callback
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
-from blstm import TestCallback
 import os
 
+class TestCallback(Callback):
+    def __init__(self, test_data, number):
+        self.test_data = test_data
+        self.number = number
+
+    def on_epoch_end(self, epoch, logs={}):
+        x, y = self.test_data
+        loss, acc = self.model.evaluate(x, y, verbose=0)
+        dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
+        log_filename = "models/cnn/log." + dt + ".csv"
+        with open(log_filename, "a") as log:
+            log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
 
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
