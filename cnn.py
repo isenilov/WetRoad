@@ -13,6 +13,8 @@ from keras.utils import to_categorical
 from datetime import datetime
 import os
 
+dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
+
 class TestCallback(Callback):
     def __init__(self, test_data, number):
         self.test_data = test_data
@@ -21,7 +23,6 @@ class TestCallback(Callback):
     def on_epoch_end(self, epoch, logs={}):
         x, y = self.test_data
         loss, acc = self.model.evaluate(x, y, verbose=0)
-        dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
         log_filename = "models/cnn/log." + dt + ".csv"
         with open(log_filename, "a") as log:
             log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
@@ -133,7 +134,7 @@ def train():
     testCallback3 = TestCallback((X_3, y_3), 3)
 
 
-    dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
+    # dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
     model_filename = "models/cnn/model." + dt + ".yaml"
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
