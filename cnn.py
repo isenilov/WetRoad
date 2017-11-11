@@ -11,6 +11,7 @@ from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
 from keras import optimizers, regularizers
 from keras.utils import to_categorical
 from datetime import datetime
+from blstm import TestCallback
 import os
 
 
@@ -100,7 +101,7 @@ def def_model(input_shape):
 
 
 def train():
-    X_test, X_train, X_val, y_test, y_train, y_val = ex_feat()
+    X_train, X_1, X_2, X_3, y_train, y_1, y_2, y_3 = ex_feat()
     start = time()
     print("\nTraining model...")
     model = def_model_cnn_blstm(X_train.shape[1:])
@@ -115,15 +116,20 @@ def train():
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
+    testCallback0 = TestCallback((X_train, y_train), "chevy")
+    testCallback1 = TestCallback((X_1, y_1), 1)
+    testCallback2 = TestCallback((X_2, y_2), 2)
+    testCallback3 = TestCallback((X_3, y_3), 3)
+
 
     dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
     model_filename = "models/cnn/model." + dt + ".yaml"
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit(X_train, y_train, validation_data=(X_val, y_val),
-              batch_size=128, epochs=50, verbose=1,
-              callbacks=[mcCallback]) #, esCallback])
+    model.fit(X_train, y_train, validation_data=(X_1, y_1),
+              batch_size=128, epochs=75, verbose=1,
+              callbacks=[mcCallback, testCallback0, testCallback1, testCallback2, testCallback3]) #, esCallback])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
@@ -168,30 +174,30 @@ def ex_feat():
     #                                   mel=False, flatten=False, scaling=True, categorical=True)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_train, y_train = shuffle(extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                                        mel=False, flatten=False, scaling=True, categorical=True), random_state=1)
-    X_test, y_test = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+    X_train, y_train = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+                                        mel=False, flatten=False, scaling=True, categorical=True)
+    X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
-    X_val, y_val = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+    X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                                     mel=False, flatten=False, scaling=True, categorical=True)
+    X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+                                mel=False, flatten=False, scaling=True, categorical=True)
 
     X_train = np.expand_dims(X_train, axis=1)
-    X_test = np.expand_dims(X_test, axis=1)
-    X_val = np.expand_dims(X_val, axis=1)
+    X_1 = np.expand_dims(X_1, axis=1)
+    X_2 = np.expand_dims(X_2, axis=1)
+    X_3 = np.expand_dims(X_3, axis=1)
 
     X_train = X_train.reshape((X_train.shape[0], 1, int(X_train.shape[2])))
-    X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
-    X_val = X_val.reshape((X_val.shape[0], 1, int(X_val.shape[2])))
-
-    # X_train = X_train.reshape((X_train.shape[0], int(X_train.shape[2]), 1))
-    # X_test = X_test.reshape((X_test.shape[0], int(X_test.shape[2]), 1))
-    # X_val = X_val.reshape((X_val.shape[0], int(X_val.shape[2]), 1))
+    X_1 = X_1.reshape((X_1.shape[0], 1, int(X_1.shape[2])))
+    X_2 = X_2.reshape((X_2.shape[0], 1, int(X_2.shape[2])))
+    X_3 = X_3.reshape((X_3.shape[0], 1, int(X_3.shape[2])))
 
     X_train = np.expand_dims(X_train, axis=3)
-    X_test = np.expand_dims(X_test, axis=3)
-    X_val = np.expand_dims(X_val, axis=3)
-    # X_val, y_val = extract_features("dataset/wet/test_wet.wav",
-    #                                 "dataset/dry/test_dry.wav", mel=False, flatten=False, scaling=True)
+    X_1 = np.expand_dims(X_1, axis=3)
+    X_2 = np.expand_dims(X_2, axis=3)
+    X_3 = np.expand_dims(X_3, axis=3)
+
     end = time()
     print("Took %.3f sec." % (end - start))
     # start = time()
@@ -200,7 +206,7 @@ def ex_feat():
     # print(y_train, y_test)
     # end = time()
     # print("Took %.3f sec." % (end - start))
-    return X_test, X_train, X_val, y_test, y_train, y_val
+    return X_train, X_1, X_2, X_3, y_train, y_1, y_2, y_3
 
 
 if __name__ == '__main__':
