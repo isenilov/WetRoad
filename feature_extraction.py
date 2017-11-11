@@ -7,7 +7,7 @@ import os.path
 import pickle
 
 
-def extract(wav_file, nfft=64, window_length=0.1, mel=True, flatten=True, augment=False):
+def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augment=False):
     frames, rate = load(wav_file, sr=44100)
     window = round(window_length * rate)
     feat = []
@@ -34,7 +34,7 @@ def extract(wav_file, nfft=64, window_length=0.1, mel=True, flatten=True, augmen
     return np.stack(feat)
 
 
-def extract_features(file_wet, file_dry, mel=True, flatten=True, scaling=False, categorical=True, augment=False):
+def extract_features(file_wet, file_dry, mel=False, flatten=True, scaling=False, categorical=True, augment=False):
     to_replace ="\\/"
     for char in to_replace:
         fw = file_wet.replace(char, "_")
