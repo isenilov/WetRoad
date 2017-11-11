@@ -136,20 +136,20 @@ def train():
     end = time()
     training_time = end - start
     print("\nTook %.3f sec." % training_time)
-    start = time()
-    print("\nEvaluating...")
-    y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
-    print(y_pred, y_test)
-    acc = accuracy_score(y_test, y_pred)
-    print("\nAccuracy:", acc)
-    rec = recall_score(y_test, y_pred, average="macro")
-    print("Recall (wet):", rec)
-    end = time()
-    print("Took %.3f sec." % (end - start))
-    with open('results.txt', 'a') as f:
-        f.write("CNN " + dt + " Input shape: " + str(X_train.shape) + " Accuracy: " + str(acc) +
-                " Reacall: " + str(rec) + " Training time: " + str(training_time) + " s\n")
-        model.summary(print_fn=lambda x: f.write(x + '\n'))
+    # start = time()
+    # print("\nEvaluating...")
+    # y_pred = to_categorical(model.predict_classes(X_test, verbose=1))
+    # print(y_pred, y_test)
+    # acc = accuracy_score(y_test, y_pred)
+    # print("\nAccuracy:", acc)
+    # rec = recall_score(y_test, y_pred, average="macro")
+    # print("Recall (wet):", rec)
+    # end = time()
+    # print("Took %.3f sec." % (end - start))
+    # with open('results.txt', 'a') as f:
+    #     f.write("CNN " + dt + " Input shape: " + str(X_train.shape) + " Accuracy: " + str(acc) +
+    #             " Reacall: " + str(rec) + " Training time: " + str(training_time) + " s\n")
+    #     model.summary(print_fn=lambda x: f.write(x + '\n'))
 
 
 def ex_feat():
