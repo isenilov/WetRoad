@@ -13,14 +13,14 @@ def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augme
     feat = []
 
     for i in range(0, len(frames)-window, int(window/2)):
-        if mel:
-            pxx = np.array(feature.mfcc(frames[i:i + window - 1],
-                               sr=rate,
-                               n_fft=nfft,
-                               hop_length=round(nfft / 2),
-                               fmax=8000))
-        else:
-            pxx = np.array(frames[i:i + window])
+        # if mel:
+        #     pxx = np.array(feature.mfcc(frames[i:i + window - 1],
+        #                        sr=rate,
+        #                        n_fft=nfft,
+        #                        hop_length=round(nfft / 2),
+        #                        fmax=8000))
+        # else:
+        pxx = np.array(frames[i:i + window])
         if flatten:
             feat.append(pxx.flatten())
         else:
