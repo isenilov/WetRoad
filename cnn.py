@@ -113,7 +113,7 @@ def def_model(input_shape):
 
 
 def train():
-    X_train, X_1, X_2, X_3, y_train, y_1, y_2, y_3 = ex_feat()
+    X_train, X_1, X_2, y_train, y_1, y_2, = ex_feat()
     start = time()
     print("\nTraining model...")
     model = def_model_cnn_blstm(X_train.shape[1:])
@@ -128,10 +128,10 @@ def train():
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
-    testCallback0 = TestCallback((X_train, y_train), "chevy")
+    testCallback0 = TestCallback((X_train, y_train), 3)
     testCallback1 = TestCallback((X_1, y_1), 1)
     testCallback2 = TestCallback((X_2, y_2), 2)
-    testCallback3 = TestCallback((X_3, y_3), 3)
+    # testCallback3 = TestCallback((X_3, y_3), 3)
 
 
     # dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
@@ -186,14 +186,14 @@ def ex_feat():
     #                                   mel=False, flatten=False, scaling=True, categorical=True)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_train, y_train = extract_features("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav",
+    X_train, y_train = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                         mel=False, flatten=False, scaling=True, categorical=True, augment=True)
     X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
     X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
                                     mel=False, flatten=False, scaling=True, categorical=True)
-    X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                                mel=False, flatten=False, scaling=True, categorical=True)
+    # X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+    #                            mel=False, flatten=False, scaling=True, categorical=True)
 
     X_train = np.expand_dims(X_train, axis=1)
     X_1 = np.expand_dims(X_1, axis=1)
@@ -218,7 +218,7 @@ def ex_feat():
     # print(y_train, y_test)
     # end = time()
     # print("Took %.3f sec." % (end - start))
-    return X_train, X_1, X_2, X_3, y_train, y_1, y_2, y_3
+    return X_train, X_1, X_2, y_train, y_1, y_2
 
 
 if __name__ == '__main__':
