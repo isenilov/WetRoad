@@ -141,7 +141,7 @@ def train():
 
     model.fit(X_train, y_train, validation_data=(X_1, y_1),
               batch_size=128, epochs=75, verbose=1,
-              callbacks=[mcCallback, testCallback0, testCallback1, testCallback2, testCallback3]) #, esCallback])
+              callbacks=[mcCallback, testCallback0, testCallback1, testCallback2]) #, esCallback])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
@@ -198,17 +198,17 @@ def ex_feat():
     X_train = np.expand_dims(X_train, axis=1)
     X_1 = np.expand_dims(X_1, axis=1)
     X_2 = np.expand_dims(X_2, axis=1)
-    X_3 = np.expand_dims(X_3, axis=1)
+    # X_3 = np.expand_dims(X_3, axis=1)
 
     X_train = X_train.reshape((X_train.shape[0], 1, int(X_train.shape[2])))
     X_1 = X_1.reshape((X_1.shape[0], 1, int(X_1.shape[2])))
     X_2 = X_2.reshape((X_2.shape[0], 1, int(X_2.shape[2])))
-    X_3 = X_3.reshape((X_3.shape[0], 1, int(X_3.shape[2])))
+    # X_3 = X_3.reshape((X_3.shape[0], 1, int(X_3.shape[2])))
 
     X_train = np.expand_dims(X_train, axis=3)
     X_1 = np.expand_dims(X_1, axis=3)
     X_2 = np.expand_dims(X_2, axis=3)
-    X_3 = np.expand_dims(X_3, axis=3)
+    # X_3 = np.expand_dims(X_3, axis=3)
 
     end = time()
     print("Took %.3f sec." % (end - start))
