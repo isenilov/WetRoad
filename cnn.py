@@ -87,17 +87,17 @@ def def_model_cnn_blstm(input_shape):
 
 def def_model(input_shape):
     model = Sequential()
-    model.add(Conv1D(filters=8, kernel_size=8, strides=2,
+    model.add(Conv1D(filters=8, kernel_size=8, strides=2, padding="same",
                      input_shape=input_shape, kernel_initializer='uniform',
                      activation='relu'))
     #model.add(Dropout(0.5))
-    model.add(Conv1D(64, 32, activation='relu'))
+    model.add(Conv1D(32, 16, padding="same", activation='relu'))
     model.add(MaxPooling1D(4))
     model.add(Dropout(0.5))
-    model.add(Conv1D(128, 16, activation='relu'))
+    model.add(Conv1D(32, 16, padding="same", activation='relu'))
     model.add(MaxPooling1D(4))
     model.add(Dropout(0.5))
-    model.add(Conv1D(256, 8, activation='relu'))
+    model.add(Conv1D(32, 16, padding="same", activation='relu'))
     # model.add(MaxPooling1D(4))
     # model.add(Flatten())
     model.add(GlobalAveragePooling1D())

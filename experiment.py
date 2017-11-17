@@ -4,7 +4,9 @@ import numpy as np
 from scipy import signal
 from plotly.offline import plot
 import plotly.graph_objs as go
+from plotly import tools
 from sklearn import preprocessing
+
 
 nfft = 64
 window_length = 0.1
@@ -16,7 +18,7 @@ rate4, frames4 = wavfile.read("dataset/wet/chevy_wet.wav")
 
 window = round(window_length * rate)
 
-i = 10000000
+i = 12965400
 
 f, t, S = signal.spectrogram(frames[i:i + window - 1],
                              rate,
@@ -72,10 +74,17 @@ mfccs4 = librosa.feature.mfcc(frames4[i:i + window - 1],
                                fmax=8000)
 mfccs4 = preprocessing.scale(mfccs4)
 
-plot([go.Heatmap(z=mfccs, zauto=False, zmin=-5, zmax=3)], filename='mfcc')
-plot([go.Heatmap(z=mfccs2, zauto=False, zmin=-5, zmax=3)], filename='mfcc2')
-plot([go.Heatmap(z=mfccs3, zauto=False, zmin=-5, zmax=3)], filename='mfcc3')
-plot([go.Heatmap(z=mfccs4, zauto=False, zmin=-5, zmax=3)], filename='mfcc4')
+fig = tools.make_subplots(rows=2, cols=2)
+fig.append_trace(go.Heatmap(z=mfccs, zauto=False, zmin=-5, zmax=4), 1, 1)
+fig.append_trace(go.Heatmap(z=mfccs2, zauto=False, zmin=-5, zmax=4), 1, 2)
+fig.append_trace(go.Heatmap(z=mfccs3, zauto=False, zmin=-5, zmax=4), 2, 1)
+fig.append_trace(go.Heatmap(z=mfccs4, zauto=False, zmin=-5, zmax=4), 2, 2)
+plot(fig, filename="mfcc4")
+
+# plot([go.Heatmap(z=mfccs, zauto=False, zmin=-5, zmax=3)], filename='mfcc')
+# plot([go.Heatmap(z=mfccs2, zauto=False, zmin=-5, zmax=3)], filename='mfcc2')
+# plot([go.Heatmap(z=mfccs3, zauto=False, zmin=-5, zmax=3)], filename='mfcc3')
+# plot([go.Heatmap(z=mfccs4, zauto=False, zmin=-5, zmax=3)], filename='mfcc4')
 
 '''
 print("Shape of the MFCCs:", mfccs.shape)
