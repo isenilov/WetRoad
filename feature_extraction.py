@@ -7,7 +7,7 @@ import os.path
 import pickle
 
 
-def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augment=False):
+def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augment=False, noise=False):
     frames, rate = load(wav_file, sr=44100)
     window = round(window_length * rate)
     feat = []
@@ -31,10 +31,13 @@ def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augme
                 feat.append(effects.pitch_shift(pxx, rate, n_steps=8.0))
                 feat.append(effects.pitch_shift(pxx, rate, n_steps=-4.0))
                 feat.append(effects.pitch_shift(pxx, rate, n_steps=-8.0))
+            if noise:
+                feat.append(pxx + np.random.normal(0, 1, pxx[i].shape))
+                feat.append(pxx * np.random.normal(1, 0.1, pxx[i].shape))
     return np.stack(feat)
 
 
-def extract_features(file_wet, file_dry, mel=False, flatten=True, scaling=False, categorical=True, augment=False):
+def extract_features(file_wet, file_dry, mel=False, flatten=True, scaling=False, categorical=True, augment=False, noise=False):
     to_replace ="\\/"
     for char in to_replace:
         fw = file_wet.replace(char, "_")
@@ -45,8 +48,8 @@ def extract_features(file_wet, file_dry, mel=False, flatten=True, scaling=False,
         with open(pickle_file, "rb") as f:
             features, labels = pickle.load(f)
         return features, labels
-    features_wet = extract(file_wet, mel=mel, flatten=flatten, augment=augment)
-    features_dry = extract(file_dry, mel=mel, flatten=flatten, augment=augment)
+    features_wet = extract(file_wet, mel=mel, flatten=flatten, augment=augment, noise=noise)
+    features_dry = extract(file_dry, mel=mel, flatten=flatten, augment=augment, noise=noise)
     print(features_dry, features_dry.shape)
     labels_wet = np.ones(features_wet.shape[0])
     labels_dry = np.zeros(features_dry.shape[0])
