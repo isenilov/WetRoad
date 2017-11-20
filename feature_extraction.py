@@ -28,9 +28,9 @@ def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augme
             '''TODO: experiments with augmentation'''
             if augment:
                 feat.append(effects.pitch_shift(pxx, rate, n_steps=4.0))
-                feat.append(effects.pitch_shift(pxx, rate, n_steps=8.0))
+                # feat.append(effects.pitch_shift(pxx, rate, n_steps=8.0))
                 feat.append(effects.pitch_shift(pxx, rate, n_steps=-4.0))
-                feat.append(effects.pitch_shift(pxx, rate, n_steps=-8.0))
+                # feat.append(effects.pitch_shift(pxx, rate, n_steps=-8.0))
             if noise:
                 feat.append(pxx + np.random.normal(0, 1, len(pxx)))
                 feat.append(pxx * np.random.normal(1, 0.1, len(pxx)))
