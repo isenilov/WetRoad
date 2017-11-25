@@ -17,8 +17,10 @@ import soundfile as sf
 
 
 dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
-N = 4096
-B = 256
+N = 4096  # length of feature vector
+B = 256  # batch size
+S = 1000000000  # steps per epoch
+
 
 class TestCallback(Callback):
     def __init__(self, gen, number):
@@ -41,11 +43,12 @@ def generator(w, d, batch_size=128):
             labels.append(1)
             data.append(d.__next__())
             labels.append(0)
-        data = np.expand_dims(np.array(data), axis=1)
+        data = np.array(data)
+        data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
         print(data.shape)
-        yield data, np.array(labels)
+        yield data, np.array(to_categorical(labels))
 
 
 def train():
@@ -62,9 +65,9 @@ def train():
 
     # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
-    mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
-                                 save_best_only=False, save_weights_only=True,
-                                 mode='auto', period=1)  # saving weights every epoch
+    # mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
+    #                              save_best_only=False, save_weights_only=True,
+    #                              mode='auto', period=1)  # saving weights every epoch
     testCallback0 = TestCallback(generator(sf.blocks("dataset/wet1/audio_mono.wav", blocksize=N),
                                  sf.blocks("dataset/dry1/audio_mono.wav", blocksize=N),
                                  batch_size=B), 1)
@@ -85,8 +88,8 @@ def train():
     model.fit_generator(generator(sf.blocks("dataset/wet/chevy_wet.wav", blocksize=N),
                                   sf.blocks("dataset/dry/chevy_dry.wav", blocksize=N),
                                   batch_size=B),
-                        steps_per_epoch=10000, epochs=75, verbose=1,
-                        callbacks=[mcCallback, testCallback0, testCallback1, testCallback2])
+                        steps_per_epoch=S, epochs=75, verbose=1,
+                        callbacks=[testCallback0, testCallback1, testCallback2])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)

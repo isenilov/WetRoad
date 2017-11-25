@@ -186,7 +186,7 @@ def ex_feat():
     #                                   mel=False, flatten=False, scaling=True, categorical=True)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_train, y_train = extract_features("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav",
+    X_train, y_train = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
                                         mel=False, flatten=False, scaling=True, categorical=True, augment=True, noise=True)
     X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
@@ -218,6 +218,7 @@ def ex_feat():
     # print(y_train, y_test)
     # end = time()
     # print("Took %.3f sec." % (end - start))
+
     return X_train, X_1, X_2, y_train, y_1, y_2
 
 
