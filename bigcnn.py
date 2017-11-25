@@ -44,7 +44,6 @@ def generator(w, d, batch_size=128):
             data.append(d.__next__())
             labels.append(0)
         data = np.array(data)[:,:,0]
-        print(data.shape)
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
