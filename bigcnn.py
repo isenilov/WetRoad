@@ -39,11 +39,11 @@ def generator(w, d, batch_size=128):
         data = []
         labels = []
         for i in range(batch_size):
-            data.append(w.__next__())
+            data.append(w.__next__()[0])
             labels.append(1)
-            data.append(d.__next__())
+            data.append(d.__next__()[0])
             labels.append(0)
-        data = np.array(data[0])
+        data = np.array(data)
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
