@@ -1,119 +1,37 @@
-from feature_extraction import extract_features, get_last
-from sklearn.metrics import recall_score, accuracy_score
-from sklearn.utils import shuffle
+# from cnn import def_model_cnn_blstm, TestCallback
+# from feature_extraction import extract_features, get_last
+# from sklearn.metrics import recall_score, accuracy_score
+# from sklearn.utils import shuffle
 import numpy as np
-from sklearn.model_selection import train_test_split
-from time import time
-from keras.models import Sequential
-from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
-from keras.layers.wrappers import Bidirectional, TimeDistributed
-from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint, Callback
-from keras import optimizers, regularizers
-from keras.utils import to_categorical
-from datetime import datetime
-import os
-
-dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
-
-class TestCallback(Callback):
-    def __init__(self, test_data, number):
-        self.test_data = test_data
-        self.number = number
-
-    def on_epoch_end(self, epoch, logs={}):
-        x, y = self.test_data
-        loss, acc = self.model.evaluate(x, y, verbose=0)
-        log_filename = "models/cnn/log." + dt + ".csv"
-        with open(log_filename, "a") as log:
-            log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
-
-def def_model_cnn_blstm(input_shape):
-    model = Sequential()
-    model.add(TimeDistributed(Conv1D(filters=16, kernel_size=32, strides=1, padding="same", activation='relu'), input_shape=input_shape))
-    model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.3)))
-    # model.add(TimeDistributed(Conv1D(32, 32, activation='relu')))
-    # model.add(TimeDistributed(MaxPooling1D(4)))
-    # model.add(TimeDistributed(Dropout(0.3)))
-    model.add(TimeDistributed(Conv1D(32, 16, padding="same", activation='relu')))
-    model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.3)))
-    # model.add(TimeDistributed(Conv1D(64, 16, activation='relu')))
-    # model.add(TimeDistributed(MaxPooling1D(4)))
-    # model.add(TimeDistributed(Dropout(0.4)))
-    model.add(TimeDistributed(Conv1D(64, 16, padding="same", activation='relu')))
-    model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.3)))
-    # model.add(TimeDistributed(Conv1D(128, 8, activation='relu')))
-    # model.add(TimeDistributed(MaxPooling1D(4)))
-    # model.add(TimeDistributed(Dropout(0.4)))
-    model.add(TimeDistributed(Conv1D(128, 8, activation='relu')))
-    model.add(TimeDistributed(MaxPooling1D(4)))
-    model.add(TimeDistributed(Dropout(0.3)))
-    model.add(TimeDistributed(Conv1D(256, 1, activation='relu')))
-    model.add(TimeDistributed(GlobalAveragePooling1D()))
-
-    # model.add(Conv1D(filters=8, kernel_size=64, strides=2, activation='relu', input_shape=input_shape))
-    # model.add(Conv1D(64, 32, activation='relu'))
-    # model.add(MaxPooling1D(4))
-    # model.add(Dropout(0.5))
-    # model.add(Conv1D(64, 32, activation='relu'))
-    # model.add(MaxPooling1D(4))
-    # model.add(Dropout(0.5))
-    # model.add(Conv1D(128, 8, activation='relu'))
-    # model.add(MaxPooling1D(4))
-    # model.add(Dropout(0.5))
-    # model.add(Conv1D(256, 2, activation='relu'))
-    # model.add(MaxPooling1D(4))
-    # model.add(Dropout(0.5))
-    # model.add(Conv1D(256, 1, activation='relu'))
-    # model.add(GlobalAveragePooling1D())
-    # model.add(Dense(128, activation='relu'))
-    # model.add(Dropout(0.5))
-
-    # model.add(TimeDistributed(Dense(128, activation='relu')))
-    # model.add(TimeDistributed(Dropout(0.5)))
-    # model.add(Bidirectional(LSTM(256, return_sequences=True)))
-    # model.add(TimeDistributed(Dropout(0.5)))
-    # model.add(Bidirectional(LSTM(256, return_sequences=True)))
-    model.add(Bidirectional(LSTM(256)))
-    model.add(Dense(2, activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    model.summary()
-    return model
+# from sklearn.model_selection import train_test_split
+# from time import time
+# from keras.models import Sequential
+# from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
+# from keras.layers.wrappers import Bidirectional, TimeDistributed
+# from keras.callbacks import ModelCheckpoint
+# from keras import optimizers, regularizers
+# from keras.utils import to_categorical
+# from datetime import datetime
+# import os
+import soundfile as sf
 
 
-def def_model(input_shape):
-    model = Sequential()
-    model.add(Conv1D(filters=8, kernel_size=8, strides=2, padding="same",
-                     input_shape=input_shape, kernel_initializer='uniform',
-                     activation='relu'))
-    #model.add(Dropout(0.5))
-    model.add(Conv1D(32, 16, padding="same", activation='relu'))
-    model.add(MaxPooling1D(4))
-    model.add(Dropout(0.5))
-    model.add(Conv1D(32, 16, padding="same", activation='relu'))
-    model.add(MaxPooling1D(4))
-    model.add(Dropout(0.5))
-    model.add(Conv1D(32, 16, padding="same", activation='relu'))
-    # model.add(MaxPooling1D(4))
-    # model.add(Flatten())
-    model.add(GlobalAveragePooling1D())
-    # model.add(Dropout(0.5))
-    model.add(Dense(128, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(2, activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    model.summary()
-    return model
+def generator(file_wet, file_dry, batch_size=128, block_size=1024):
+    w = sf.blocks(file_wet, blocksize=block_size)
+    d = sf.blocks(file_dry, blocksize=block_size)
+    data = []
+    labels = []
+    for i in range(batch_size):
+        data.append(w.__next__())
+        labels.append(1)
+        data.append(d.__next__())
+        labels.append(0)
+    yield np.array(data), np.array(labels)
 
 
 def train():
-    X_train, X_1, X_2, y_train, y_1, y_2, = ex_feat()
+
+    # X_train, X_1, X_2, y_train, y_1, y_2, = ex_feat()
     start = time()
     print("\nTraining model...")
     model = def_model_cnn_blstm(X_train.shape[1:])
@@ -186,7 +104,7 @@ def ex_feat():
     #                                   mel=False, flatten=False, scaling=True, categorical=True)
     # X_val, y_val = extract_features("dataset/wet/test_wet.wav", "dataset/dry/test_dry.wav",
     #                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_train, y_train = extract_features("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav",
+    X_train, y_train = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                         mel=False, flatten=False, scaling=True, categorical=True, augment=True, noise=True)
     X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
@@ -221,21 +139,11 @@ def ex_feat():
     return X_train, X_1, X_2, y_train, y_1, y_2
 
 
+
 if __name__ == '__main__':
-    np.random.seed(1)
-    train()
-'''
-    try:
-        train()
+    # np.random.seed(1)
+    # train()
+    s = generator("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav", batch_size=128, block_size=1000)
+    for i in range(2):
+        print(s.__next__())
 
-    except Exception as e:
-        dt = datetime.now().strftime("%d-%m-%Y_%H-%M")
-        with open(dt + ".log", "w") as f:
-            f.write(str(e))
-            print(str(e))
-        # os.system("sudo poweroff")  # Shut down virtual machine in case of error
-
-    else:
-        pass
-        # os.system("sudo poweroff")  # Shut down virtual machine (for training in the cloud)
-'''
