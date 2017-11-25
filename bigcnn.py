@@ -1,32 +1,51 @@
-# from cnn import def_model_cnn_blstm, TestCallback
-# from feature_extraction import extract_features, get_last
-# from sklearn.metrics import recall_score, accuracy_score
-# from sklearn.utils import shuffle
+from cnn import def_model_cnn_blstm
+from feature_extraction import extract_features, get_last
+from sklearn.metrics import recall_score, accuracy_score
+from sklearn.utils import shuffle
 import numpy as np
-# from sklearn.model_selection import train_test_split
-# from time import time
-# from keras.models import Sequential
-# from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
-# from keras.layers.wrappers import Bidirectional, TimeDistributed
-# from keras.callbacks import ModelCheckpoint
-# from keras import optimizers, regularizers
-# from keras.utils import to_categorical
-# from datetime import datetime
-# import os
+from sklearn.model_selection import train_test_split
+from time import time
+from keras.models import Sequential
+from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
+from keras.layers.wrappers import Bidirectional, TimeDistributed
+from keras.callbacks import ModelCheckpoint, Callback
+from keras import optimizers, regularizers
+from keras.utils import to_categorical
+from datetime import datetime
+import os
 import soundfile as sf
 
 
-def generator(file_wet, file_dry, batch_size=128, block_size=1024):
-    w = sf.blocks(file_wet, blocksize=block_size)
-    d = sf.blocks(file_dry, blocksize=block_size)
-    data = []
-    labels = []
-    for i in range(batch_size):
-        data.append(w.__next__())
-        labels.append(1)
-        data.append(d.__next__())
-        labels.append(0)
-    yield np.array(data), np.array(labels)
+dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
+N = 4096
+B = 256
+
+class TestCallback(Callback):
+    def __init__(self, gen, number):
+        self.gen = gen
+        self.number = number
+
+    def on_epoch_end(self, epoch, logs={}):
+        loss, acc = self.model.evaluate_generator(self.gen, verbose=0)
+        log_filename = "models/cnn/log." + dt + ".csv"
+        with open(log_filename, "a") as log:
+            log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
+
+
+def generator(w, d, batch_size=128):
+    while 1:
+        data = []
+        labels = []
+        for i in range(batch_size):
+            data.append(w.__next__())
+            labels.append(1)
+            data.append(d.__next__())
+            labels.append(0)
+        data = np.expand_dims(np.array(data), axis=1)
+        data = data.reshape((data.shape[0], 1, data.shape[2]))
+        data = np.expand_dims(data, axis=3)
+        print(data.shape)
+        yield data, np.array(labels)
 
 
 def train():
@@ -34,21 +53,27 @@ def train():
     # X_train, X_1, X_2, y_train, y_1, y_2, = ex_feat()
     start = time()
     print("\nTraining model...")
-    model = def_model_cnn_blstm(X_train.shape[1:])
+    model = def_model_cnn_blstm((1, N, 1))
     weights = get_last("models/cnn/", "weights")
     if weights is not None:
         model.load_weights(weights)
     print("Using weights:", weights)
-    print("Dataset shape:", X_train.shape)
+    # print("Dataset shape:", X_train.shape)
 
     # tbCallback = TensorBoard(histogram_freq=1, write_grads=True, write_graph=False)  # Tensorboard callback
     # esCallback = EarlyStopping(monitor="val_loss", min_delta=0.01, patience=5, verbose=1)  # early stopping callback
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
-    testCallback0 = TestCallback((X_train, y_train), 3)
-    testCallback1 = TestCallback((X_1, y_1), 1)
-    testCallback2 = TestCallback((X_2, y_2), 2)
+    testCallback0 = TestCallback(generator(sf.blocks("dataset/wet1/audio_mono.wav", blocksize=N),
+                                 sf.blocks("dataset/dry1/audio_mono.wav", blocksize=N),
+                                 batch_size=B), 1)
+    testCallback1 = TestCallback(generator(sf.blocks("dataset/wet2/audio_mono.wav", blocksize=N),
+                                 sf.blocks("dataset/dry2/audio_mono.wav", blocksize=N),
+                                 batch_size=B), 2)
+    testCallback2 = TestCallback(generator(sf.blocks("dataset/wet3/audio_mono.wav", blocksize=N),
+                                 sf.blocks("dataset/dry3/audio_mono.wav", blocksize=N),
+                                 batch_size=B), 3)
     # testCallback3 = TestCallback((X_3, y_3), 3)
 
 
@@ -57,9 +82,11 @@ def train():
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit(X_train, y_train, validation_data=(X_1, y_1),
-              batch_size=128, epochs=75, verbose=1,
-              callbacks=[mcCallback, testCallback0, testCallback1, testCallback2]) #, esCallback])
+    model.fit_generator(generator(sf.blocks("dataset/wet/chevy_wet.wav", blocksize=N),
+                                  sf.blocks("dataset/dry/chevy_dry.wav", blocksize=N),
+                                  batch_size=B),
+                        steps_per_epoch=10000, epochs=75, verbose=1,
+                        callbacks=[mcCallback, testCallback0, testCallback1, testCallback2])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
@@ -141,9 +168,11 @@ def ex_feat():
 
 
 if __name__ == '__main__':
-    # np.random.seed(1)
-    # train()
-    s = generator("dataset/wet/chevy_wet.wav", "dataset/dry/chevy_dry.wav", batch_size=128, block_size=1000)
-    for i in range(2):
-        print(s.__next__())
+    np.random.seed(1)
+    train()
+    # w = sf.blocks("dataset/wet/chevy_wet.wav", blocksize=100)
+    # d = sf.blocks("dataset/dry/chevy_dry.wav", blocksize=100)
+    # s = generator(w, d, batch_size=5)
+    # for i in range(3):
+    #     print(s.__next__())
 
