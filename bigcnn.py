@@ -45,7 +45,7 @@ def generator(w, d, batch_size=128):
             labels.append(0)
         data = np.array(data)
         data = np.expand_dims(data, axis=1)
-        data = data.reshape((data.shape[0]*2, 1, data.shape[2]))
+        data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
         yield data, np.array(to_categorical(labels))
 
@@ -84,8 +84,8 @@ def train():
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit_generator(generator(sf.blocks("dataset/wet/yt_wet_10hrs.wav", blocksize=N),
-                                  sf.blocks("dataset/dry/yt_dry_8hrs.wav", blocksize=N),
+    model.fit_generator(generator(sf.blocks("dataset/wet/chevy_wet.wav", blocksize=N),
+                                  sf.blocks("dataset/dry/chevy_dry.wav", blocksize=N),
                                   batch_size=B),
                         steps_per_epoch=S, epochs=75, verbose=1,
                         callbacks=[testCallback0, testCallback1, testCallback2])
