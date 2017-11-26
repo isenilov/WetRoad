@@ -25,6 +25,7 @@ S = 100  # steps per epoch
 def generator(w, d, batch_size=128):
     i = 0
     w = sf.read(w, frames=N, start=i)
+    print(w)
     d = sf.read(d, frames=N, start=i)
     while 1:
         data = []
