@@ -1,18 +1,10 @@
 from cnn import def_model_cnn_blstm, TestCallback
 from feature_extraction import extract_features, get_last
-from sklearn.metrics import recall_score, accuracy_score
-from sklearn.utils import shuffle
 import numpy as np
-from sklearn.model_selection import train_test_split
 from time import time
-from keras.models import Sequential
-from keras.layers import Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Dense, Flatten, LSTM
-from keras.layers.wrappers import Bidirectional, TimeDistributed
-from keras.callbacks import ModelCheckpoint, Callback
-from keras import optimizers, regularizers
+from keras.callbacks import ModelCheckpoint
 from keras.utils import to_categorical
 from datetime import datetime
-import os
 import soundfile as sf
 
 
@@ -70,6 +62,10 @@ def train():
     X_1 = np.expand_dims(X_1, axis=3)
     X_2 = np.expand_dims(X_2, axis=3)
     X_3 = np.expand_dims(X_3, axis=3)
+
+    mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
+                                 save_best_only=False, save_weights_only=True,
+                                 mode='auto', period=1)  # saving weights every epoch
     testCallback1 = TestCallback((X_1, y_1), 1)
     testCallback2 = TestCallback((X_2, y_2), 2)
     testCallback3 = TestCallback((X_3, y_3), 3)
@@ -81,7 +77,7 @@ def train():
 
     model.fit_generator(generator("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav", batch_size=B),
                         steps_per_epoch=S, epochs=75, verbose=1,
-                        callbacks=[testCallback1, testCallback2, testCallback3])
+                        callbacks=[mcCallback, testCallback1, testCallback2, testCallback3])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
@@ -92,9 +88,3 @@ def train():
 if __name__ == '__main__':
     np.random.seed(1)
     train()
-    # w = sf.blocks("dataset/wet/chevy_wet.wav", blocksize=100)
-    # d = sf.blocks("dataset/dry/chevy_dry.wav", blocksize=100)
-    # s = generator(w, d, batch_size=5)
-    # for i in range(3):
-    #     print(s.__next__())
-
