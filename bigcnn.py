@@ -40,7 +40,7 @@ def generator(w, d, batch_size=128):
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
-        print("/n{:,}".format(i))
+        print("\n{:,}".format(i))
         yield data, np.array(to_categorical(labels))
         if i + batch_size * N > 1000000000:
             i = 0
