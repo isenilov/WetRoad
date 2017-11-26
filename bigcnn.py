@@ -23,7 +23,11 @@ S = 1000  # steps per epoch
 
 
 def generator(w, d, batch_size=128):
-    while 1:
+    w = sf.blocks(file=w, blocksize=N)
+    d = sf.blocks(file=d, blocksize=N)
+    n = S
+    while n > 0:
+        n = n - 1
         data = []
         labels = []
         for i in range(batch_size):
@@ -32,7 +36,7 @@ def generator(w, d, batch_size=128):
             data.append(d.__next__())
             labels.append(0)
         data = np.array(data)
-        data = data[:,:,0]
+        data = data[:, :, 0]
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
@@ -72,9 +76,8 @@ def train():
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit_generator(generator(sf.blocks("dataset/wet/yt_wet_10hrs.wav", blocksize=N),
-                                  sf.blocks("dataset/dry/yt_dry_8hrs.wav", blocksize=N),
-                                  batch_size=B),
+    model.fit_generator(generator("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav", batch_size=B),
+                        batch_size=B,
                         steps_per_epoch=S, epochs=75, verbose=1,
                         callbacks=[testCallback1, testCallback2, testCallback3])
 
