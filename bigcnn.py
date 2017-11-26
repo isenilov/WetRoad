@@ -28,11 +28,11 @@ def generator(w, d, batch_size=128):
         data = []
         labels = []
         for n in range(batch_size):
-            w, _ = sf.read(w, frames=N, start=i)
-            d, _ = sf.read(d, frames=N, start=i)
-            data.append(w)
+            wet, _ = sf.read(w, frames=N, start=i)
+            dry, _ = sf.read(d, frames=N, start=i)
+            data.append(wet)
             labels.append(1)
-            data.append(d)
+            data.append(dry)
             labels.append(0)
             i += batch_size * N
         data = np.array(data)
