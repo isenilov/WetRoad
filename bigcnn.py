@@ -28,7 +28,7 @@ def generator(w, d, batch_size=128):
     # n = S
     i = 0
     while 1:
-        data = np.zeros(1)
+        data = np.zeros((1,1,1,1))
         labels = np.zeros(1)
         for n in range(B):
             data = np.concatenate((data, sf.read(w, frames=N, start=i), sf.read(w, frames=N, start=i)))
