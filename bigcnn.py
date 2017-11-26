@@ -27,8 +27,8 @@ def generator(w, d, batch_size=128):
     while 1:
         data = []
         labels = []
-        wet = sf.blocks(w, blocksize=N, start=i)
-        dry = sf.blocks(d, blocksize=N, start=i)
+        wet = sf.blocks(w, blocksize=N, overlap=N//2, start=i)
+        dry = sf.blocks(d, blocksize=N, overlap=N//2, start=i)
         for n in range(batch_size):
             data.append(next(wet))
             labels.append(1)
@@ -40,8 +40,9 @@ def generator(w, d, batch_size=128):
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
+        print("/n{:,}".format(i))
         yield data, np.array(to_categorical(labels))
-        if i + batch_size * N > 1600000000:
+        if i + batch_size * N > 1000000000:
             i = 0
 
 
