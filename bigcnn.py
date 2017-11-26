@@ -31,11 +31,12 @@ def generator(w, d, batch_size=128):
         data = np.zeros((1,1,1,1))
         labels = np.zeros(1)
         for n in range(B):
-            data = np.concatenate((data, sf.read(w, frames=N, start=i), sf.read(w, frames=N, start=i)))
-            data = np.expand_dims(data, axis=1)
-            data = data.reshape((data.shape[0], 1, data.shape[2]))
-            data = np.expand_dims(data, axis=3)
-            data = data[:, :, 0]
+            data_temp = np.concatenate((sf.read(w, frames=N, start=i), sf.read(w, frames=N, start=i)))
+            data_temp = np.expand_dims(data_temp, axis=1)
+            data_temp = data_temp.reshape((data_temp.shape[0], 1, data_temp.shape[2]))
+            data_temp = np.expand_dims(data_temp, axis=3)
+            data_temp = data_temp[:, :, 0]
+            data = np.concatenate((data, data_temp))
             labels = np.concatenate((labels, np.ones(N), np.zeros(N)))
         yield data, to_categorical(labels)
         i += B * N
