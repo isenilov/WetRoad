@@ -19,7 +19,7 @@ import soundfile as sf
 dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
 N = 4096  # length of feature vector
 B = 256  # batch size
-S = 100  # steps per epoch
+S = 1000  # steps per epoch
 
 
 def generator(w, d, batch_size=128):
