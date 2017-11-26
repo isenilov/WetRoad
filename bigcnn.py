@@ -39,7 +39,7 @@ def generator(w, d, batch_size=128):
             labels = np.concatenate((labels, np.ones(N), np.zeros(N)))
         yield data, to_categorical(labels)
         i += B * N
-        if i + B * N > 200000:
+        if i + B * N > 200000000:
             i = 0
 
 
