@@ -25,7 +25,7 @@ S = 100  # steps per epoch
 def generator(w, d, batch_size=128):
     w = sf.blocks(file=w, blocksize=N)
     d = sf.blocks(file=d, blocksize=N)
-    n = S + 10
+    n = S
     while n > 0:
         n = n - 1
         data = []
