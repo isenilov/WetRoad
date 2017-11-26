@@ -25,9 +25,9 @@ S = 100  # steps per epoch
 def generator(w, d, batch_size=128):
     w = sf.blocks(file=w, blocksize=N)
     d = sf.blocks(file=d, blocksize=N)
-    n = S
-    while n > 0:
-        n = n - 1
+    # n = S
+    while 1:
+        # n = n - 1
         data = []
         labels = []
         for i in range(batch_size):
