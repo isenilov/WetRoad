@@ -31,9 +31,9 @@ def generator(w, d, batch_size=128):
         data = []
         labels = []
         for i in range(batch_size):
-            data.append(w.__next__())
+            data.append(next(w))
             labels.append(1)
-            data.append(d.__next__())
+            data.append(next(d))
             labels.append(0)
         data = np.array(data)
         data = data[:, :, 0]
