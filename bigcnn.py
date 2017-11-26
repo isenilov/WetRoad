@@ -24,25 +24,24 @@ S = 100  # steps per epoch
 
 def generator(w, d, batch_size=128):
     i = 0
-    w, _ = sf.read(w, frames=N, start=i)
-    print(w)
-    d, _ = sf.read(d, frames=N, start=i)
     while 1:
         data = []
         labels = []
         for i in range(batch_size):
+            w, _ = sf.read(w, frames=N, start=i)
+            d, _ = sf.read(d, frames=N, start=i)
             data.append(w)
-            labels.append([1] * N)
+            labels.append(1)
             data.append(d)
-            labels.append([0] * N)
+            labels.append(0)
+            i += batch_size * N
         data = np.array(data)
         data = data[:, :, 0]
         data = np.expand_dims(data, axis=1)
         data = data.reshape((data.shape[0], 1, data.shape[2]))
         data = np.expand_dims(data, axis=3)
         yield data, np.array(to_categorical(labels))
-        i += B * N
-        if i + B * N > 2000000:
+        if i + batch_size * N > 2000000:
             i = 0
 
 
