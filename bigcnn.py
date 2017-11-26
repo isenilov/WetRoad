@@ -23,24 +23,25 @@ S = 100  # steps per epoch
 
 
 def generator(w, d, batch_size=128):
-    # w = sf.blocks(file=w, blocksize=N)
-    # d = sf.blocks(file=d, blocksize=N)
-    # n = S
     i = 0
+    w = sf.read(w, frames=N, start=i)
+    d = sf.read(d, frames=N, start=i)
     while 1:
-        data = np.zeros((1,1,1,1))
-        labels = np.zeros(1)
-        for n in range(B):
-            data_temp = np.concatenate((sf.read(w, frames=N, start=i), sf.read(w, frames=N, start=i)))
-            data_temp = np.expand_dims(data_temp, axis=1)
-            data_temp = data_temp.reshape((data_temp.shape[0], 1, data_temp.shape[2]))
-            data_temp = np.expand_dims(data_temp, axis=3)
-            data_temp = data_temp[:, :, 0]
-            data = np.concatenate((data, data_temp))
-            labels = np.concatenate((labels, np.ones(N), np.zeros(N)))
-        yield data, to_categorical(labels)
+        data = []
+        labels = []
+        for i in range(batch_size):
+            data.append(w)
+            labels.append([1] * N)
+            data.append(d)
+            labels.append([0] * N)
+        data = np.array(data)
+        data = data[:, :, 0]
+        data = np.expand_dims(data, axis=1)
+        data = data.reshape((data.shape[0], 1, data.shape[2]))
+        data = np.expand_dims(data, axis=3)
+        yield data, np.array(to_categorical(labels))
         i += B * N
-        if i + B * N > 200000000:
+        if i + B * N > 2000000:
             i = 0
 
 
@@ -77,7 +78,7 @@ def train():
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit_generator(generator("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav", batch_size=B),
+    model.fit_generator(generator("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav", batch_size=B),
                         steps_per_epoch=S, epochs=75, verbose=1,
                         callbacks=[testCallback1, testCallback2, testCallback3])
 
