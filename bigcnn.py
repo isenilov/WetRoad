@@ -19,13 +19,13 @@ import soundfile as sf
 dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
 N = 4096  # length of feature vector
 B = 256  # batch size
-S = 950  # steps per epoch
+S = 100  # steps per epoch
 
 
 def generator(w, d, batch_size=128):
     w = sf.blocks(file=w, blocksize=N)
     d = sf.blocks(file=d, blocksize=N)
-    n = S - 150
+    n = S
     while n > 0:
         n = n - 1
         data = []
