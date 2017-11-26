@@ -63,7 +63,7 @@ def train():
     X_2 = np.expand_dims(X_2, axis=3)
     X_3 = np.expand_dims(X_3, axis=3)
 
-    mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}-{val_acc:.4f}.h5", monitor='val_acc', verbose=0,
+    mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}.h5", verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
     testCallback1 = TestCallback((X_1, y_1), 1)
