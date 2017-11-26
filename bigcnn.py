@@ -34,7 +34,7 @@ def generator(w, d, batch_size=128):
             labels.append(1)
             data.append(next(dry))
             labels.append(0)
-            i += batch_size * N
+            i += N
         data = np.array(data)
         data = data[:, :, 0]
         data = np.expand_dims(data, axis=1)
@@ -42,7 +42,7 @@ def generator(w, d, batch_size=128):
         data = np.expand_dims(data, axis=3)
         print(i)
         yield data, np.array(to_categorical(labels))
-        if i + batch_size * N > 200000000:
+        if i + batch_size * N > 20000000000:
             i = 0
 
 
