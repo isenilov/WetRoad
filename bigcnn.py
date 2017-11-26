@@ -77,7 +77,7 @@ def train():
         model_yaml.write(model.to_yaml())
 
     model.fit_generator(generator("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav", batch_size=B),
-                        steps_per_epoch=S, epochs=75, verbose=1,
+                        steps_per_epoch=S, epochs=75, verbose=1, max_queue_size=S,
                         callbacks=[testCallback1, testCallback2, testCallback3])
 
     weights_filename = "models/cnn/" + dt + ".h5"
