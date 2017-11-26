@@ -27,7 +27,7 @@ def generator(w, d, batch_size=128):
     while 1:
         data = []
         labels = []
-        for i in range(batch_size):
+        for n in range(batch_size):
             w, _ = sf.read(w, frames=N, start=i)
             d, _ = sf.read(d, frames=N, start=i)
             data.append(w)
