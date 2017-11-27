@@ -25,7 +25,7 @@ class TestCallback(Callback):
         loss, acc = self.model.evaluate(x, y, verbose=0)
         log_filename = "models/cnn/log." + dt + ".csv"
         with open(log_filename, "a") as log:
-            log.write("{},{},{},{}\n".format(self.number, epoch, loss, acc))
+            log.write("{},{},{},{},{}\n".format(self.number, epoch, loss, acc, logs["acc"]))
 
 def def_model_cnn_blstm(input_shape):
     model = Sequential()
