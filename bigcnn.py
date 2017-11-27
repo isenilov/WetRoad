@@ -47,37 +47,37 @@ def train():
         model.load_weights(weights)
     print("Using weights:", weights)
 
-    X_1, y_1 = extract_features("dataset/wet1/audio_mono.wav", "dataset/dry1/audio_mono.wav",
+    X_1, y_1 = extract_features("yt_data/wet01.wav", "yt_data/dry01.wav",
                                 mel=False, flatten=False, scaling=True, categorical=True)
-    X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
-                                mel=False, flatten=False, scaling=True, categorical=True)
-    X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
-                                mel=False, flatten=False, scaling=True, categorical=True)
+    # X_2, y_2 = extract_features("dataset/wet2/audio_mono.wav", "dataset/dry2/audio_mono.wav",
+    #                             mel=False, flatten=False, scaling=True, categorical=True)
+    # X_3, y_3 = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
+    #                             mel=False, flatten=False, scaling=True, categorical=True)
     X_1 = np.expand_dims(X_1, axis=1)
-    X_2 = np.expand_dims(X_2, axis=1)
-    X_3 = np.expand_dims(X_3, axis=1)
+    # X_2 = np.expand_dims(X_2, axis=1)
+    # X_3 = np.expand_dims(X_3, axis=1)
     X_1 = X_1.reshape((X_1.shape[0], 1, int(X_1.shape[2])))
-    X_2 = X_2.reshape((X_2.shape[0], 1, int(X_2.shape[2])))
-    X_3 = X_3.reshape((X_3.shape[0], 1, int(X_3.shape[2])))
+    # X_2 = X_2.reshape((X_2.shape[0], 1, int(X_2.shape[2])))
+    # X_3 = X_3.reshape((X_3.shape[0], 1, int(X_3.shape[2])))
     X_1 = np.expand_dims(X_1, axis=3)
-    X_2 = np.expand_dims(X_2, axis=3)
-    X_3 = np.expand_dims(X_3, axis=3)
+    # X_2 = np.expand_dims(X_2, axis=3)
+    # X_3 = np.expand_dims(X_3, axis=3)
 
     mcCallback = ModelCheckpoint("models/cnn/weights.{epoch:02d}.h5", verbose=0,
                                  save_best_only=False, save_weights_only=True,
                                  mode='auto', period=1)  # saving weights every epoch
     testCallback1 = TestCallback((X_1, y_1), 1)
-    testCallback2 = TestCallback((X_2, y_2), 2)
-    testCallback3 = TestCallback((X_3, y_3), 3)
+    # testCallback2 = TestCallback((X_2, y_2), 2)
+    # testCallback3 = TestCallback((X_3, y_3), 3)
 
     # dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
     model_filename = "models/cnn/model." + dt + ".yaml"
     with open(model_filename, "w") as model_yaml:
         model_yaml.write(model.to_yaml())
 
-    model.fit_generator(generator("dataset/wet/yt_wet_10hrs.wav", "dataset/dry/yt_dry_8hrs.wav", batch_size=B),
+    model.fit_generator(generator("yt_data/wet00.wav", "yt_data/dry00.wav", batch_size=B),
                         steps_per_epoch=S, epochs=75, verbose=1,
-                        callbacks=[mcCallback, testCallback1, testCallback2, testCallback3])
+                        callbacks=[mcCallback, testCallback1])  # , testCallback2, testCallback3])
 
     weights_filename = "models/cnn/" + dt + ".h5"
     model.save_weights(weights_filename)
