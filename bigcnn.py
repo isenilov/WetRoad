@@ -10,11 +10,11 @@ import soundfile as sf
 
 dt = datetime.now().strftime("%d-%m-%Y.%H-%M")
 N = 16384  # length of feature vector
-B = 256  # batch size
-S = 1000  # steps per epoch
+B = 64  # batch size
+S = 100  # steps per epoch
 
 
-def generator(w, d, batch_size=128, N=N):
+def generator(w, d, batch_size=32, N=N):
     i = 0
     while 1:
         data = []
