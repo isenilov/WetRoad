@@ -1,7 +1,7 @@
 from scipy.io import wavfile
 import numpy as np
 from scipy import signal
-from librosa import feature, effects, load
+# from librosa import feature, effects, load
 from sklearn.preprocessing import minmax_scale
 import os.path
 import pickle
