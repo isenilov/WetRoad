@@ -8,7 +8,7 @@ import pickle
 
 
 def extract(wav_file, nfft=64, window_length=0.1, mel=False, flatten=True, augment=False, noise=False):
-    frames, rate = load(wav_file, sr=44100)
+    rate, frames = wavfile.read(wav_file)
     window = 4096  # round(window_length * rate)
     feat = []
 
