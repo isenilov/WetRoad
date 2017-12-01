@@ -15,9 +15,9 @@ if model is not None and weights is not None:
     loaded_model.summary()
     X_test, y_test = extract_features("dataset/wet3/audio_mono.wav", "dataset/dry3/audio_mono.wav",
                                       mel=False, flatten=False, scaling=True, categorical=True)
-    # X_test = np.expand_dims(X_test, axis=1)
-    # X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
-    # X_test = np.expand_dims(X_test, axis=3)
+    X_test = np.expand_dims(X_test, axis=1)
+    X_test = X_test.reshape((X_test.shape[0], 1, int(X_test.shape[2])))
+    X_test = np.expand_dims(X_test, axis=3)
 
     score = loaded_model.evaluate(X_test, y_test, verbose=1)
     print("\n%s: %.2f%%" % (loaded_model.metrics_names[1], score[1] * 100))
