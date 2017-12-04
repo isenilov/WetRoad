@@ -9,6 +9,6 @@ if model is not None:
     loaded_model_file = yaml_file.read()
     yaml_file.close()
     loaded_model = model_from_yaml(loaded_model_file)
-    plot_model(model, to_file='model.png', show_shapes=True, show_layer_names=False)
+    plot_model(loaded_model, to_file='model.png', show_shapes=True, show_layer_names=False)
 # model = def_model_cnn_blstm((1, 16384, 1))
 
